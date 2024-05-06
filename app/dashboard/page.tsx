@@ -1,8 +1,13 @@
 import AuthButton from "@/components/AuthButton";
+import Footer from "@/components/Footer";
+import AddMatch from "@/components/matches/AddMatch";
+import RecentMatches from "@/components/matches/RecentMatches";
 import Menu from "@/components/menu/Menu";
+import DashboardHeader from "@/components/user/DashboardHeader";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
-export default async function MatchesDashboard() {
+
+export default async function Dashboard() {
     const supabase = createClient();
 
     const {
@@ -22,9 +27,20 @@ export default async function MatchesDashboard() {
                     </div>
                 </nav>
             </div>
+
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-                <h1>Matches</h1>
+                <DashboardHeader />
+                <main className="flex-1 flex flex-col gap-6">
+                    <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
+                    <AddMatch />
+                </main>
+                <main className="flex-1 flex flex-col gap-6">
+                    <h2 className="font-bold text-4xl mb-4">Recent Matches</h2>
+                    <RecentMatches />
+                </main>
             </div>
+
+            <Footer />
         </div>
     );
 }

@@ -7,6 +7,8 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import DashboardHeader from "@/components/user/DashboardHeader";
 import RecentMatches from "@/components/matches/RecentMatches";
+import AddMatch from "@/components/matches/AddMatch";
+import Menu from "@/components/menu/Menu";
 
 export default async function UserPage() {
     const supabase = createClient();
@@ -24,23 +26,15 @@ export default async function UserPage() {
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                     <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
+                        <Menu />
                         <AuthButton />
                     </div>
                 </nav>
             </div>
 
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
-                <DashboardHeader />
-                <main className="flex-1 flex flex-col gap-6">
-                    <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
-                </main>
-                <main className="flex-1 flex flex-col gap-6">
-                    <h2 className="font-bold text-4xl mb-4">Recent Matches</h2>
-                    <RecentMatches />
-                </main>
+                <h1>User</h1>
             </div>
-
-            <Footer />
         </div>
     );
 }
