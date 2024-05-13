@@ -4,32 +4,12 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { SubmitButton } from "./submit-button";
 import { CreateUserData } from "@/server/UserData";
-import SignUpButton from "@/components/SignUpButton";
 
 export default function Login({
     searchParams,
 }: {
     searchParams: { message: string };
 }) {
-    const signIn = async (formData: FormData) => {
-        "use server";
-
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const supabase = createClient();
-
-        const { error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        return redirect("/dashboard");
-    };
-
     const signUp = async (formData: FormData) => {
         "use server";
 
@@ -47,7 +27,8 @@ export default function Login({
         });
 
         if (error) {
-            return redirect("/login?message=Could not authenticate user");
+            console.log(error);
+            return redirect("/login?message=Could not create user");
         }
 
         await CreateUserData(
@@ -60,20 +41,6 @@ export default function Login({
             return redirect(
                 "/login?message=Could not create a user data record. Please contact support."
             );
-        }
-
-        return redirect(
-            "/login?message=Check email to continue sign in process"
-        );
-    };
-
-    const forgotPassword = async (formData: FormData) => {
-        "use server";
-        const email = formData.get("email") as string;
-        const supabase = createClient();
-        const { error } = await supabase.auth.resetPasswordForEmail(email);
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
         }
 
         return redirect(
@@ -110,6 +77,18 @@ export default function Login({
                 </label>
                 <input
                     className="rounded-md px-4 py-2 bg-inherit border mb-6"
+                    name="given_name"
+                    placeholder="John"
+                    required
+                />
+                <input
+                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
+                    name="sur_name"
+                    placeholder="Doe"
+                    required
+                />
+                <input
+                    className="rounded-md px-4 py-2 bg-inherit border mb-6"
                     name="email"
                     placeholder="you@example.com"
                     required
@@ -125,19 +104,11 @@ export default function Login({
                     required
                 />
                 <SubmitButton
-                    formAction={signIn}
-                    className="bg-green-700 rounded-md px-4 py-2 text-foreground mb-2"
-                    pendingText="Signing In..."
-                >
-                    Sign In
-                </SubmitButton>
-                <SignUpButton />
-                <SubmitButton
-                    formAction={forgotPassword}
+                    formAction={signUp}
                     className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
-                    pendingText="Sending..."
+                    pendingText="Signing Up..."
                 >
-                    Forgot Password
+                    Sign Up
                 </SubmitButton>
                 {searchParams?.message && (
                     <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
