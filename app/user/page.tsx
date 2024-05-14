@@ -7,7 +7,7 @@ import { redirect } from "next/navigation";
 import Footer from "@/components/Footer";
 import DashboardHeader from "@/components/user/DashboardHeader";
 import RecentMatches from "@/components/matches/RecentMatches";
-import AddMatch from "@/components/matches/AddMatch";
+import AddMatch from "@/components/matches/AddMatchButton";
 import Menu from "@/components/menu/Menu";
 
 export default async function UserPage() {

@@ -1,6 +1,6 @@
 import AuthButton from "@/components/AuthButton";
 import Footer from "@/components/Footer";
-import AddMatchButton from "@/components/matches/AddMatch";
+import AddMatchForm from "@/components/matches/AddMatchForm";
 import RecentMatches from "@/components/matches/RecentMatches";
 import Menu from "@/components/menu/Menu";
 import DashboardHeader from "@/components/user/DashboardHeader";
@@ -32,7 +32,7 @@ export default async function Dashboard() {
                 <DashboardHeader />
                 <main className="flex-1 flex flex-col gap-6">
                     <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
-                    <AddMatchButton />
+                    <AddMatchForm />
                 </main>
                 <main className="flex-1 flex flex-col gap-6">
                     <h2 className="font-bold text-4xl mb-4">Recent Matches</h2>

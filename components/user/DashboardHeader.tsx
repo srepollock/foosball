@@ -16,15 +16,23 @@ export default async function DashboardHeader() {
     const { data: userData } = await supabase
         .from("user-data")
         .select()
-        .is("id", user.id);
+        .eq("id", user.id);
 
     if (!userData) {
-        await supabase.from("user-data").insert({ id: user.id });
+        const { error } = await supabase.from("user-data").insert({
+            id: user.id,
+            given_name: "",
+            sur_name: "",
+            full_name: "",
+        });
+        if (error) {
+            console.log(error);
+        }
     }
 
     let content = "";
-    if (userData) {
-        content = userData[0].given_name + " " + userData[0].sur_name;
+    if (userData && userData.length > 0 && userData[0].full_name !== "") {
+        content = userData[0].full_name;
     } else {
         content = user.email!;
     }
