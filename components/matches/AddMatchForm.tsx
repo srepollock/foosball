@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/server";
 import AddMatchButton from "./AddMatchButton";
+import { handleAddMatch } from "@/server/Matchs";
+import { fetchPlayers } from "@/server/Users";
+import { MatchData, Team } from "@/models/MatcheData";
 
 type Player = {
     id: any;
@@ -25,81 +28,8 @@ export default function AddMatchForm() {
     const [awayDefendersScore, setAwayDefendersScore] = useState(0);
 
     useEffect(() => {
-        const fetchPlayers = async () => {
-            const { data, error } = await supabase
-                .from("players")
-                .select("id, full_name");
-            if (error) {
-                console.error("Error fetching players:", error.message);
-            } else {
-                setPlayers(data);
-            }
-        };
         fetchPlayers();
     }, []);
-
-    const handleAddMatch = async () => {
-        const home_score = homeForwardsScore + homeDefendersScore;
-        const away_score = awayForwardsScore + awayDefendersScore;
-        const winner = home_score > away_score ? "HOME" : "AWAY";
-        if (
-            homeForwardsPlayer &&
-            homeDefendersPlayer &&
-            awayForwardsPlayer &&
-            awayDefendersPlayer
-        ) {
-            const { data, error } = await supabase.from("matches").insert([
-                {
-                    created_at: datetime,
-                    played_at: datetime,
-                    home_forward: homeForwardsPlayer,
-                    away_forward: awayForwardsPlayer,
-                    home_defense: homeDefendersPlayer,
-                    away_defense: awayDefendersPlayer,
-                    home_forward_goals: homeForwardsScore,
-                    home_defense_goals: homeDefendersScore,
-                    away_forward_goals: awayForwardsScore,
-                    away_defense_goals: awayDefendersScore,
-                    home_score: home_score,
-                    away_score: away_score,
-                    winner: winner,
-                },
-            ]);
-
-            if (error) {
-                console.error("Error adding match:", error.message);
-            } else {
-                console.log("Match added successfully:", data);
-                // Add any further logic here, such as resetting form fields
-            }
-        } else if (homeForwardsPlayer && awayForwardsPlayer) {
-            const { data, error } = await supabase.from("matches").insert([
-                {
-                    created_at: datetime,
-                    played_at: datetime,
-                    home_forward: homeForwardsPlayer,
-                    away_forward: awayForwardsPlayer,
-                    home_defense: homeDefendersPlayer,
-                    away_defense: awayDefendersPlayer,
-                    home_forward_goals: homeForwardsScore,
-                    home_defense_goals: homeDefendersScore,
-                    away_forward_goals: awayForwardsScore,
-                    away_defense_goals: awayDefendersScore,
-                    home_score: home_score,
-                    away_score: away_score,
-                    winner: winner,
-                },
-            ]);
-            if (error) {
-                console.error("Error adding match:", error.message);
-            } else {
-                console.log("Match added successfully:", data);
-                // Add any further logic here, such as resetting form fields
-            }
-        } else {
-            console.error("Please fill in all fields");
-        }
-    };
 
     return (
         <div>
@@ -187,7 +117,27 @@ export default function AddMatchForm() {
                 onChange={(e) => setAwayDefendersScore(Number(e.target.value))}
                 placeholder="Away Defender Score"
             />
-            <AddMatchButton onClick={handleAddMatch} />
+            <AddMatchButton onClick={(e) => {
+                let homeScore = homeForwardsScore + homeDefendersScore;
+                let awayScore = awayForwardsScore + awayDefendersScore;
+                handleAddMatch(e, {
+                    {
+                    created_at: datetime,
+                    played_at: datetime,
+                    home_forward: homeForwardsPlayer,
+                    away_forward: awayForwardsPlayer,
+                    home_defense: homeDefendersPlayer,
+                    away_defense: awayDefendersPlayer,
+                    home_forward_goals: homeForwardsScore,
+                    home_defense_goals: homeDefendersScore,
+                    away_forward_goals: awayForwardsScore,
+                    away_defense_goals: awayDefendersScore,
+                    home_score: homeScore,
+                    away_score: awayScore,
+                    winner: homeScore > awayScore ? Team.HOME : Team.AWAY,
+                },
+                } as MatchData)
+            }} />
         </div>
     );
 }
