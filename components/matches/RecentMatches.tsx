@@ -15,10 +15,6 @@ export default function RecentMatches(props: RecentMatchesProps) {
     const [update, setUpdate] = useState(true);
     const [page, setPage] = useState<number>(0);
 
-    if (!props.userId) {
-        return redirect("/login");
-    }
-
     useEffect(() => {
         fetchMatches(page, props.userId!).then((data) => {
             if (data) {
@@ -34,27 +30,27 @@ export default function RecentMatches(props: RecentMatchesProps) {
     return (
         <div>
             <div>Recent Matches</div>
-            <table className="shadow-lg bg-white border-collapse">
+            <table className="shadow-lg bg-blue-900 border-collapse">
                 <tr>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Match ID
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Played Date
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Home Foward
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Home Defense
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Away Forward
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Away Defense
                     </th>
-                    <th className="bg-blue-100 border text-left px-8 py-4">
+                    <th className="bg-blue-900 border text-left px-8 py-4">
                         Score
                     </th>
                 </tr>

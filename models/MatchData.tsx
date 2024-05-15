@@ -1,6 +1,6 @@
 export enum Team {
-    HOME: 'HOME',
-    AWAY: 'AWAY'
+    HOME = 'HOME',
+    AWAY = 'AWAY'
 }
 
 export type MatchData = {
@@ -8,14 +8,14 @@ export type MatchData = {
     created_at: string | undefined;
     played_at: string | undefined;
     home_forward: string;
-    home_foward_goals: number;
+    home_forward_goals: number;
     home_defense: string | undefined;
     home_defense_goals: number | undefined;
     away_forward: string;
-    away_foward_goals: number;
+    away_forward_goals: number;
     away_defense: string | undefined;
     away_defense_goals: number | undefined;
-    score_home: number;
-    score_away: number;
+    home_score: number;
+    away_score: number;
     winner: Team;
 };
