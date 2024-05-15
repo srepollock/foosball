@@ -12,3 +12,4 @@
 -   <https://nextjs.org/docs/getting-started/project-structure>
 -   <https://tailwindcss.com/docs/installation>
 -   <https://supabase.com/docs/guides/auth/enterprise-sso/auth-sso-saml>
+-   <https://resend.com/docs/send-with-supabase-smtp>

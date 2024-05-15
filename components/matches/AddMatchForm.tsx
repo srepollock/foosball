@@ -26,7 +26,9 @@ export default function AddMatchForm() {
     const [awayDefendersScore, setAwayDefendersScore] = useState(0);
 
     useEffect(() => {
-        fetchPlayers();
+        fetchPlayers().then((data) => {
+            setPlayers(data as PlayerData[]);
+        });
     }, []);
 
     return (
@@ -71,7 +73,6 @@ export default function AddMatchForm() {
                         name="homeDefendersPlayer"
                         id="homeDefendersPlayer"
                         onChange={(e) => setHomeDefendersPlayer(e.target.value)}
-                        required
                     >
                         <option value="">Home Defender</option>
                         {players.map((player: PlayerData) => (
@@ -120,7 +121,6 @@ export default function AddMatchForm() {
                         name="awayDefendersPlayer"
                         id="awayDefendersPlayer"
                         onChange={(e) => setAwayDefendersPlayer(e.target.value)}
-                        required
                     >
                         <option value="">Away Defender</option>
                         {players.map((player: PlayerData) => (

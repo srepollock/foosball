@@ -134,7 +134,7 @@ export default function Login({
                 <SignUpButton />
                 <SubmitButton
                     formAction={forgotPassword}
-                    className="border border-foreground/20 rounded-md px-4 py-2 text-foreground mb-2"
+                    className="bg-red-700 rounded-md px-4 py-2 text-foreground mb-2"
                     pendingText="Sending..."
                 >
                     Forgot Password
