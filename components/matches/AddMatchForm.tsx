@@ -32,7 +32,7 @@ export default function AddMatchForm() {
     return (
         <div>
             <form>
-                <div className='mb-4'>
+                <div className="mb-4">
                     <input
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="datetime-local"
@@ -41,7 +41,7 @@ export default function AddMatchForm() {
                         required
                     />
                 </div>
-                <div className='mb-8'>
+                <div className="mb-8">
                     <select
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         name="homeForwardsPlayer"
@@ -60,7 +60,9 @@ export default function AddMatchForm() {
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
                         value={homeForwardsScore}
-                        onChange={(e) => setHomeForwardsScore(Number(e.target.value))}
+                        onChange={(e) =>
+                            setHomeForwardsScore(Number(e.target.value))
+                        }
                         placeholder="Home Forward Score"
                         required
                     />
@@ -82,7 +84,9 @@ export default function AddMatchForm() {
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
                         value={homeDefendersScore}
-                        onChange={(e) => setHomeDefendersScore(Number(e.target.value))}
+                        onChange={(e) =>
+                            setHomeDefendersScore(Number(e.target.value))
+                        }
                         placeholder="Home Defender Score"
                     />
                 </div>
@@ -105,7 +109,9 @@ export default function AddMatchForm() {
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
                         value={awayForwardsScore}
-                        onChange={(e) => setAwayForwardsScore(Number(e.target.value))}
+                        onChange={(e) =>
+                            setAwayForwardsScore(Number(e.target.value))
+                        }
                         placeholder="Away Forward Score"
                         required
                     />
@@ -127,30 +133,35 @@ export default function AddMatchForm() {
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
                         value={awayDefendersScore}
-                        onChange={(e) => setAwayDefendersScore(Number(e.target.value))}
+                        onChange={(e) =>
+                            setAwayDefendersScore(Number(e.target.value))
+                        }
                         placeholder="Away Defender Score"
                     />
                 </div>
-            <AddMatchButton onClick={(e: any) => {
-                let homeScore = homeForwardsScore + homeDefendersScore;
-                let awayScore = awayForwardsScore + awayDefendersScore;
-                handleAddMatch(e, {
-                    id: "",
-                    created_at: datetime,
-                    played_at: datetime,
-                    home_forward: homeForwardsPlayer,
-                    away_forward: awayForwardsPlayer,
-                    home_defense: homeDefendersPlayer,
-                    away_defense: awayDefendersPlayer,
-                    home_forward_goals: homeForwardsScore,
-                    home_defense_goals: homeDefendersScore,
-                    away_forward_goals: awayForwardsScore,
-                    away_defense_goals: awayDefendersScore,
-                    home_score: homeScore,
-                    away_score: awayScore,
-                    winner: homeScore > awayScore ? Team.HOME : Team.AWAY,
-                } as MatchData)
-            }} />
+                <AddMatchButton
+                    onClick={(e: any) => {
+                        let homeScore = homeForwardsScore + homeDefendersScore;
+                        let awayScore = awayForwardsScore + awayDefendersScore;
+                        handleAddMatch(e, {
+                            id: "",
+                            created_at: datetime,
+                            played_at: datetime,
+                            home_forward: homeForwardsPlayer,
+                            away_forward: awayForwardsPlayer,
+                            home_defense: homeDefendersPlayer,
+                            away_defense: awayDefendersPlayer,
+                            home_forward_goals: homeForwardsScore,
+                            home_defense_goals: homeDefendersScore,
+                            away_forward_goals: awayForwardsScore,
+                            away_defense_goals: awayDefendersScore,
+                            score_home: homeScore,
+                            score_away: awayScore,
+                            winner:
+                                homeScore > awayScore ? Team.HOME : Team.AWAY,
+                        } as MatchData);
+                    }}
+                />
             </form>
         </div>
     );

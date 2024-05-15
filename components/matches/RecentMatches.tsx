@@ -6,8 +6,8 @@ import { useEffect, useState } from "react";
 import { redirect } from "next/navigation";
 
 type RecentMatchesProps = {
-    userId: string | undefined;
     page: number;
+    userId?: string | undefined;
 };
 
 export default function RecentMatches(props: RecentMatchesProps) {
