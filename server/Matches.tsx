@@ -29,9 +29,12 @@ export async function AddMatch() {
 
 export async function handleAddMatch(e: any, matchData: MatchData) {
     const supabase = createClient();
-    const home_score = matchData.home_forward_goals + (matchData.home_defense_goals ?? 0);
-    const away_score = matchData.away_forward_goals + (matchData.away_defense_goals ?? 0);
-    const winner = matchData.home_score > matchData.away_score ? Team.HOME : Team.AWAY;
+    const home_score =
+        matchData.home_forward_goals + (matchData.home_defense_goals ?? 0);
+    const away_score =
+        matchData.away_forward_goals + (matchData.away_defense_goals ?? 0);
+    const winner =
+        matchData.score_home > matchData.score_away ? Team.HOME : Team.AWAY;
     if (
         matchData.home_forward &&
         matchData.home_defense &&
@@ -89,4 +92,4 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
     } else {
         console.error("Please fill in all fields");
     }
-};
+}
