@@ -31,12 +31,12 @@ export default async function Dashboard() {
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
                 <DashboardHeader />
                 <main className="flex-1 flex flex-col gap-6">
-                    <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
-                    <AddMatchForm />
-                </main>
-                <main className="flex-1 flex flex-col gap-6">
                     <h2 className="font-bold text-4xl mb-4">Recent Matches</h2>
                     <RecentMatches page={0} userId={user.id} />
+                </main>
+                <main className="flex-1 flex flex-col gap-6">
+                    <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
+                    <AddMatchForm />
                 </main>
             </div>
 

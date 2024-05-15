@@ -1,4 +1,6 @@
 import AuthButton from "@/components/AuthButton";
+import AddMatchForm from "@/components/matches/AddMatchForm";
+import RecentMatches from "@/components/matches/RecentMatches";
 import Menu from "@/components/menu/Menu";
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
@@ -24,6 +26,14 @@ export default async function MatchesDashboard() {
             </div>
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
                 <h1>Matches</h1>
+                <main className="flex-1 flex flex-col gap-6">
+                    <h2 className="font-bold text-4xl mb-4">Recent Matches</h2>
+                    <RecentMatches page={0} />
+                </main>
+                <main className="flex-1 flex flex-col gap-6">
+                    <h2 className="font-bold text-4xl mb-4">Add a Match</h2>
+                    <AddMatchForm />
+                </main>
             </div>
         </div>
     );
