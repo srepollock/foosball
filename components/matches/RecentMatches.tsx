@@ -28,7 +28,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
     }, [update]);
 
     return (
-        <div>
+        <div className="flex-1 flex flex-col gap-6">
             <div>Recent Matches</div>
             <table className="shadow-lg bg-blue-900 border-collapse">
                 <tbody>
@@ -55,10 +55,11 @@ export default function RecentMatches(props: RecentMatchesProps) {
                             Score
                         </th>
                     </tr>
-                    {matches?.map((match: MatchData) => (
+                    {matches?.map((match: MatchData, index: number) => (
                         <tr
-                            className="hover:bg-gray-50 focus:bg-gray-300 active:bg-red-200"
+                            className="bg-slate-200 hover:bg-slate-500 focus:bg-gray-300 active:bg-red-200 text-black hover:text-black focus:text-black active:text-black"
                             tabIndex={0}
+                            key={index}
                         >
                             <td className="border px-8 py-4">{match.id}</td>
                             <td className="border px-8 py-4">

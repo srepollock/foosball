@@ -12,18 +12,26 @@ type PlayerData = {
 };
 
 export default function AddMatchForm() {
-    const [datetime, setDatetime] = useState("");
+    const [playedAt, setPlayedAt] = useState(new Date());
 
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
     const [homeForwardsPlayer, setHomeForwardsPlayer] = useState("");
-    const [homeDefendersPlayer, setHomeDefendersPlayer] = useState("");
+    const [homeDefendersPlayer, setHomeDefendersPlayer] = useState<
+        String | undefined
+    >(undefined);
     const [awayForwardsPlayer, setAwayForwardsPlayer] = useState("");
-    const [awayDefendersPlayer, setAwayDefendersPlayer] = useState("");
+    const [awayDefendersPlayer, setAwayDefendersPlayer] = useState<
+        String | undefined
+    >(undefined);
     const [homeForwardsScore, setHomeForwardsScore] = useState(0);
-    const [homeDefendersScore, setHomeDefendersScore] = useState(0);
+    const [homeDefendersScore, setHomeDefendersScore] = useState<
+        number | undefined
+    >(undefined);
     const [awayForwardsScore, setAwayForwardsScore] = useState(0);
-    const [awayDefendersScore, setAwayDefendersScore] = useState(0);
+    const [awayDefendersScore, setAwayDefendersScore] = useState<
+        number | undefined
+    >(undefined);
 
     useEffect(() => {
         fetchPlayers().then((data) => {
@@ -38,8 +46,9 @@ export default function AddMatchForm() {
                     <input
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="datetime-local"
+                        id="played_at"
                         value={new Date().toISOString().substring(0, 16)}
-                        onChange={(e) => setDatetime(e.target.value)}
+                        onChange={(e) => setPlayedAt(new Date(e.target.value))}
                         required
                     />
                 </div>
@@ -53,7 +62,7 @@ export default function AddMatchForm() {
                     >
                         <option value="">Home Forward</option>
                         {players.map((player: PlayerData) => (
-                            <option key={player.id} value={player.full_name}>
+                            <option key={player.id} value={player.id}>
                                 {player.full_name}
                             </option>
                         ))}
@@ -76,7 +85,7 @@ export default function AddMatchForm() {
                     >
                         <option value="">Home Defender</option>
                         {players.map((player: PlayerData) => (
-                            <option key={player.id} value={player.full_name}>
+                            <option key={player.id} value={player.id}>
                                 {player.full_name}
                             </option>
                         ))}
@@ -101,7 +110,7 @@ export default function AddMatchForm() {
                     >
                         <option value="">Away Forward</option>
                         {players.map((player: PlayerData) => (
-                            <option key={player.id} value={player.full_name}>
+                            <option key={player.id} value={player.id}>
                                 {player.full_name}
                             </option>
                         ))}
@@ -124,7 +133,7 @@ export default function AddMatchForm() {
                     >
                         <option value="">Away Defender</option>
                         {players.map((player: PlayerData) => (
-                            <option key={player.id} value={player.full_name}>
+                            <option key={player.id} value={player.id}>
                                 {player.full_name}
                             </option>
                         ))}
@@ -132,7 +141,7 @@ export default function AddMatchForm() {
                     <input
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
-                        value={awayDefendersScore}
+                        value={awayDefendersScore ?? 0}
                         onChange={(e) =>
                             setAwayDefendersScore(Number(e.target.value))
                         }
@@ -141,12 +150,15 @@ export default function AddMatchForm() {
                 </div>
                 <AddMatchButton
                     onClick={(e: any) => {
-                        let homeScore = homeForwardsScore + homeDefendersScore;
-                        let awayScore = awayForwardsScore + awayDefendersScore;
+                        let homeScore =
+                            homeForwardsScore +
+                            (homeDefendersScore ? homeDefendersScore : 0);
+                        let awayScore =
+                            awayForwardsScore +
+                            (awayDefendersScore ? awayDefendersScore : 0);
                         handleAddMatch(e, {
-                            id: "",
-                            created_at: datetime,
-                            played_at: datetime,
+                            created_at: new Date().toISOString(),
+                            played_at: playedAt.toISOString(),
                             home_forward: homeForwardsPlayer,
                             away_forward: awayForwardsPlayer,
                             home_defense: homeDefendersPlayer,
