@@ -1,8 +1,8 @@
 # Fooseball
 
--   [ ] User login
--   [ ] User stat tracking
--   [ ] Match History
+-   [x] User login
+-   [x] User stat tracking
+-   [x] Match History
 -   [ ] Tournament bracket making
 -   [ ] Add SSO
 
