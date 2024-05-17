@@ -4,5 +4,5 @@ export type UserStats = {
     games_played: number;
     goals: number;
     wins?: number;
-    loses?: number;
+    losses?: number;
 };
