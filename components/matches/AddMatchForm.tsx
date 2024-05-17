@@ -94,7 +94,7 @@ export default function AddMatchForm() {
                     <input
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="number"
-                        value={homeDefendersScore}
+                        value={homeDefendersScore ?? 0}
                         onChange={(e) =>
                             setHomeDefendersScore(Number(e.target.value))
                         }
