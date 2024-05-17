@@ -49,7 +49,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
     }, [update]);
 
     return (
-        <div className="relative flex flex-col w-full h-full text-gray-700 bg-gray-200 shadow-md rounded-xl bg-clip-border">
+        <div className="flex flex-col w-full h-full text-gray-700 bg-gray-200 shadow-md rounded-xl bg-clip-border min-w-xs max-w-md sm:max-w-lg md:max-w-1xl lg:max-w-2xl xl:max-w-4xl">
             <div className="p-6 px-0 overflow-scroll">
                 <table className="w-full text-left table-auto min-w-max">
                     <tbody>

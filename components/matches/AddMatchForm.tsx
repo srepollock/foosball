@@ -77,6 +77,7 @@ export default function AddMatchForm() {
                         placeholder="Home Forward Score"
                         required
                     />
+                    <br />
                     <select
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         name="homeDefendersPlayer"
@@ -125,6 +126,7 @@ export default function AddMatchForm() {
                         placeholder="Away Forward Score"
                         required
                     />
+                    <br />
                     <select
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         name="awayDefendersPlayer"
