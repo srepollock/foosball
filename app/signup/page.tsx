@@ -73,7 +73,7 @@ export default function Login({
 
             <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
                 <label className="text-md" htmlFor="email">
-                    Email
+                    First name
                 </label>
                 <input
                     className="rounded-md px-4 py-2 bg-inherit border mb-6"
@@ -81,12 +81,18 @@ export default function Login({
                     placeholder="John"
                     required
                 />
+                <label className="text-md" htmlFor="email">
+                    Last Name
+                </label>
                 <input
                     className="rounded-md px-4 py-2 bg-inherit border mb-6"
                     name="sur_name"
                     placeholder="Doe"
                     required
                 />
+                <label className="text-md" htmlFor="email">
+                    Email
+                </label>
                 <input
                     className="rounded-md px-4 py-2 bg-inherit border mb-6"
                     name="email"
