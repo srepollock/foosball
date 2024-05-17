@@ -60,7 +60,7 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
         matchData.home_forward &&
         matchData.home_defense &&
         matchData.away_forward &&
-        matchData.away_defense_goals
+        matchData.away_defense
     ) {
         const { data, error } = await supabase.from("matches").insert([
             {

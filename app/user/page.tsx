@@ -10,6 +10,7 @@ import RecentMatches from "@/components/matches/RecentMatches";
 import AddMatch from "@/components/matches/AddMatchButton";
 import Menu from "@/components/menu/Menu";
 import UserDetails from "@/components/user/UserDetails";
+import ListOfUsers from "@/components/user/ListOfUsers";
 
 export default async function UserPage() {
     const supabase = createClient();
@@ -23,7 +24,7 @@ export default async function UserPage() {
     }
 
     return (
-        <div className="flex-1 w-full flex flex-col gap-20 items-center">
+        <div className="flex-1 w-full flex flex-col items-center gap-20">
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                     <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
@@ -33,9 +34,11 @@ export default async function UserPage() {
                 </nav>
             </div>
 
-            <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
+            <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 px-3 shrink min-w-xs max-w-xl sm:max-w-xl md:max-w-1xl lg:max-w-2xl xl:max-w-4xl">
                 <UserDetails id={user.id} />
+                <ListOfUsers />
             </div>
+            <Footer />
         </div>
     );
 }
