@@ -19,7 +19,7 @@ export default function MatchPage({ params }: { params: { slug: string } }) {
             </div>
 
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 shrink min-w-xs max-w-xl sm:max-w-xl md:max-w-1xl lg:max-w-2xl xl:max-w-4xl">
-                <h1>Settings</h1>
+                <h1>Match</h1>
                 <RecentMatches page={0} />
             </div>
             <Footer />
