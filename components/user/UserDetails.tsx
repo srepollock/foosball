@@ -28,7 +28,7 @@ export default function UserDetails(props: UserDetailsProps) {
             <h2>Player Goals {playerStats?.goals}</h2>
             <h2>Player Games played {playerStats?.games_played}</h2>
             <h2>Total Wins {playerStats?.wins}</h2>
-            <h2>Total Loses {playerStats?.loses}</h2>
+            <h2>Total Loses {playerStats?.losses}</h2>
         </div>
     );
 }
