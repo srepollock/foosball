@@ -4,7 +4,7 @@ import { match } from "assert";
 
 export async function fetchMatches(page: number, userId?: string) {
     const supabase = createClient();
-    const PAGE_SIZE = 10;
+    const PAGE_SIZE = 9;
     if (!userId) {
         const { data, error } = await supabase
             .from("matches")
@@ -42,16 +42,26 @@ export async function fetchMatch(matchId: string) {
     return data;
 }
 
-export async function fetchTotalMatches() {
+export async function fetchTotalMatches(userId?: string) {
     const supabase = createClient();
-    const { data, error } = await supabase
-        .from("matches")
-        .select("id")
-        .range(0, 0);
-    if (error) {
-        console.log(error);
+    if (!userId) {
+        const { data, error } = await supabase.from("matches").select("id");
+        if (error) {
+            console.log(error);
+        }
+        return data?.length;
+    } else {
+        const { data, error } = await supabase
+            .from("matches")
+            .select("")
+            .or(
+                `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
+            );
+        if (error) {
+            console.log(error);
+        }
+        return data?.length;
     }
-    return data?.length;
 }
 
 export async function handleAddMatch(e: any, matchData: MatchData) {

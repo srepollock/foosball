@@ -3,4 +3,6 @@ export type UserStats = {
     created_at: string;
     games_played: number;
     goals: number;
-}
+    wins?: number;
+    loses?: number;
+};
