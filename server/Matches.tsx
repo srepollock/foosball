@@ -8,28 +8,50 @@ export async function fetchMatches(page: number, userId?: string) {
     if (!userId) {
         const { data, error } = await supabase
             .from("matches")
-            .select("id")
-            .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
-        if (error) {
-            console.log(error);
-        }
-        return data;
-    } else {
-        const orStatement = `home_foward.eq.${userId},home_defense.eq.${userId},away_forward.eq.${userId},away_defense.eq.${userId}`;
-        // const { data, error } = await supabase
-        //     .from("matches")
-        //     .select("id")
-        //     .or(orStatement)
-        //     .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
-        const { data, error } = await supabase
-            .from("matches")
             .select()
             .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
         if (error) {
             console.log(error);
         }
         return data;
+    } else {
+        const { data, error } = await supabase
+            .from("matches")
+            .select("*")
+            .or(
+                `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
+            )
+            .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
+        if (error) {
+            console.log(error);
+        }
+        return data;
     }
+}
+
+export async function fetchMatch(matchId: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from("matches")
+        .select()
+        .eq("id", matchId)
+        .single();
+    if (error) {
+        console.log(error);
+    }
+    return data;
+}
+
+export async function fetchTotalMatches() {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from("matches")
+        .select("id")
+        .range(0, 0);
+    if (error) {
+        console.log(error);
+    }
+    return data?.length;
 }
 
 export async function handleAddMatch(e: any, matchData: MatchData) {
