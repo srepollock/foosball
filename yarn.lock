@@ -827,6 +827,18 @@
     "@sentry/types" "8.2.1"
     "@sentry/utils" "8.2.1"
 
+"@sentry/profiling-node@^8.2.1":
+  version "8.2.1"
+  resolved "https://registry.yarnpkg.com/@sentry/profiling-node/-/profiling-node-8.2.1.tgz#fadddd3b1ad7877b2e33b42b4595c3cc30a7150a"
+  integrity sha512-oHjKXu8rROlaM1GZHQNyt8lG/58XSD6lUHgxx33IuqUTZjIzise8AB7fE1fzg4+JNFZITag6zzYqrQqPGSN3HQ==
+  dependencies:
+    "@sentry/core" "8.2.1"
+    "@sentry/node" "8.2.1"
+    "@sentry/types" "8.2.1"
+    "@sentry/utils" "8.2.1"
+    detect-libc "^2.0.2"
+    node-abi "^3.61.0"
+
 "@sentry/react@8.2.1":
   version "8.2.1"
   resolved "https://registry.yarnpkg.com/@sentry/react/-/react-8.2.1.tgz#9dcdb36c152546cbe3affdd74786a41293083ffb"
@@ -1489,6 +1501,11 @@ debug@4, debug@^4.1.0, debug@^4.1.1, debug@^4.3.1, debug@^4.3.4:
   dependencies:
     ms "2.1.2"
 
+detect-libc@^2.0.2:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.3.tgz#f0cd503b40f9939b894697d19ad50895e30cf700"
+  integrity sha512-bwy0MGW55bG41VqxxypOsdSdGqLwXPI/focwgTYCFMbdUiBAxLg9CFzG08sz2aqzknwiX7Hkl0bQENjg8iLByw==
+
 didyoumean@^1.2.2:
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/didyoumean/-/didyoumean-1.2.2.tgz#989346ffe9e839b4555ecf5666edea0d3e8ad037"
@@ -2033,6 +2050,13 @@ next@latest:
     "@next/swc-win32-ia32-msvc" "14.2.3"
     "@next/swc-win32-x64-msvc" "14.2.3"
 
+node-abi@^3.61.0:
+  version "3.62.0"
+  resolved "https://registry.yarnpkg.com/node-abi/-/node-abi-3.62.0.tgz#017958ed120f89a3a14a7253da810f5d724e3f36"
+  integrity sha512-CPMcGa+y33xuL1E0TcNIu4YyaZCxnnvkVaEXrsosR3FxN+fV8xvb7Mzpb7IgKler10qeMkE6+Dp8qJhpzdq35g==
+  dependencies:
+    semver "^7.3.5"
+
 node-domexception@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/node-domexception/-/node-domexception-1.0.0.tgz#6888db46a1f71c0b76b3f7555016b63fe64766e5"
@@ -2449,7 +2473,7 @@ semver@^6.3.1:
   resolved "https://registry.yarnpkg.com/semver/-/semver-6.3.1.tgz#556d2ef8689146e46dcea4bfdd095f3434dffcb4"
   integrity sha512-BR7VvDCVHO+q2xBEWskxS6DJE1qRnb7DxzUrogb71CWoSficBxYsiAGd+Kl0mmq/MprG9yArRkyrQxTO6XjMzA==
 
-semver@^7.5.2:
+semver@^7.3.5, semver@^7.5.2:
   version "7.6.2"
   resolved "https://registry.yarnpkg.com/semver/-/semver-7.6.2.tgz#1e3b34759f896e8f14d6134732ce798aeb0c6e13"
   integrity sha512-FNAIBWCx9qcRhoHcgcJ0gvU7SN1lYU2ZXuSfl04bSC5OpvDHFyJCjdNHomPXxjQlCBU67YW64PzY7/VIEH7F2w==
