@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import AddMatchButton from "./AddMatchButton";
-import { handleAddMatch } from "@/server/Matches";
-import { fetchPlayers } from "@/server/Users";
-import { MatchData, Team } from "@/models/MatchData";
+import { useState, useEffect } from 'react';
+import AddMatchButton from './AddMatchButton';
+import { handleAddMatch } from '@/server/Matches';
+import { fetchPlayers } from '@/server/Users';
+import { MatchData, Team } from '@/models/MatchData';
+import { UpdateUserStats } from '@/server/UserData';
+import { UserMatchStats } from '@/models/UserStats';
 
 type PlayerData = {
     id: any;
@@ -16,11 +18,11 @@ export default function AddMatchForm() {
 
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
-    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState("");
+    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState('');
     const [homeDefendersPlayer, setHomeDefendersPlayer] = useState<
         String | undefined
     >(undefined);
-    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState("");
+    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState('');
     const [awayDefendersPlayer, setAwayDefendersPlayer] = useState<
         String | undefined
     >(undefined);
@@ -47,7 +49,7 @@ export default function AddMatchForm() {
                         className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
                         type="datetime-local"
                         id="played_at"
-                        value={new Date().toISOString().substring(0, 16)}
+                        defaultValue={new Date().toISOString().substring(0, 16)}
                         onChange={(e) => setPlayedAt(new Date(e.target.value))}
                         required
                     />
@@ -174,6 +176,27 @@ export default function AddMatchForm() {
                             winner:
                                 homeScore > awayScore ? Team.HOME : Team.AWAY,
                         } as MatchData);
+
+                        UpdateUserStats({
+                            id: homeForwardsPlayer,
+                            goals: homeForwardsScore,
+                            won: homeScore > awayScore,
+                        } as UserMatchStats);
+                        UpdateUserStats({
+                            id: homeDefendersPlayer,
+                            goals: homeDefendersScore ?? 0,
+                            won: homeScore > awayScore,
+                        } as UserMatchStats);
+                        UpdateUserStats({
+                            id: awayForwardsPlayer,
+                            goals: awayForwardsScore,
+                            won: awayScore > homeScore,
+                        } as UserMatchStats);
+                        UpdateUserStats({
+                            id: awayDefendersPlayer,
+                            goals: awayDefendersScore ?? 0,
+                            won: awayScore > homeScore,
+                        } as UserMatchStats);
                     }}
                 />
             </form>

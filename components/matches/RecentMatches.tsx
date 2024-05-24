@@ -1,10 +1,10 @@
-"use client";
-import { MatchData } from "@/models/MatchData";
-import { fetchMatches, fetchTotalMatches } from "@/server/Matches";
-import { createClient } from "@/utils/supabase/client";
-import { useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { fetchPlayers } from "@/server/Users";
+'use client';
+import { MatchData } from '@/models/MatchData';
+import { fetchMatches, calculateTotalMatches } from '@/server/Matches';
+import { createClient } from '@/utils/supabase/client';
+import { useEffect, useState } from 'react';
+import { redirect } from 'next/navigation';
+import { fetchPlayers } from '@/server/Users';
 
 type PlayerData = {
     id: string;
@@ -28,7 +28,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
     }, [page]);
 
     useEffect(() => {
-        fetchTotalMatches(props.userId).then((data) => {
+        calculateTotalMatches(props.userId).then((data) => {
             if (data) {
                 const totalPage = Math.ceil(data / 10);
                 const pages = [];
@@ -115,7 +115,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
                                                 if (
                                                     match.home_defense !=
                                                         undefined &&
-                                                    match.home_defense != ""
+                                                    match.home_defense != ''
                                                 ) {
                                                     return match.home_defense.includes(
                                                         player.id
@@ -145,7 +145,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
                                                 if (
                                                     match.away_defense !=
                                                         undefined &&
-                                                    match.away_defense != ""
+                                                    match.away_defense != ''
                                                 ) {
                                                     return match.away_defense.includes(
                                                         player.id
