@@ -1,3 +1,4 @@
+import { UserData } from '@/models/UserData';
 import { UserMatchStats, UserStats } from '@/models/UserStats';
 import { createClient } from '@/utils/supabase/client';
 
@@ -13,6 +14,33 @@ export async function CreateUserData(
         sur_name: sur_name,
         full_name: given_name + ' ' + sur_name,
     });
+
+    if (error) {
+        console.log(error);
+    }
+}
+
+export async function GetUserData(userId: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from('user-data')
+        .select()
+        .eq('id', userId)
+        .single();
+
+    if (error) {
+        console.log(error);
+    }
+
+    return data;
+}
+
+export async function UpdateUserData(data: UserData) {
+    const supabase = createClient();
+    const { error } = await supabase
+        .from('user-data')
+        .update(data)
+        .eq('id', data.id);
 
     if (error) {
         console.log(error);
