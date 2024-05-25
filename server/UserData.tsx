@@ -1,6 +1,6 @@
-import { UserData } from '@/models/UserData';
-import { UserMatchStats, UserStats } from '@/models/UserStats';
-import { createClient } from '@/utils/supabase/client';
+import { UserData } from "@/models/UserData";
+import { UserMatchStats, UserStats } from "@/models/UserStats";
+import { createClient } from "@/utils/supabase/client";
 
 export async function CreateUserData(
     userId: string,
@@ -8,11 +8,11 @@ export async function CreateUserData(
     sur_name: string
 ) {
     const supabase = createClient();
-    const { error } = await supabase.from('user-data').insert({
+    const { error } = await supabase.from("user-data").insert({
         id: userId,
         given_name: given_name,
         sur_name: sur_name,
-        full_name: given_name + ' ' + sur_name,
+        full_name: given_name + " " + sur_name,
     });
 
     if (error) {
@@ -23,9 +23,9 @@ export async function CreateUserData(
 export async function GetUserData(userId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('user-data')
+        .from("user-data")
         .select()
-        .eq('id', userId)
+        .eq("id", userId)
         .single();
 
     if (error) {
@@ -38,9 +38,9 @@ export async function GetUserData(userId: string) {
 export async function UpdateUserData(data: UserData) {
     const supabase = createClient();
     const { error } = await supabase
-        .from('user-data')
+        .from("user-data")
         .update(data)
-        .eq('id', data.id);
+        .eq("id", data.id);
 
     if (error) {
         console.log(error);
@@ -49,7 +49,7 @@ export async function UpdateUserData(data: UserData) {
 
 export async function CreateUserStats(userId: string) {
     const supabase = createClient();
-    const { error } = await supabase.from('user-stats').insert({
+    const { error } = await supabase.from("user-stats").insert({
         id: userId,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -67,9 +67,9 @@ export async function CreateUserStats(userId: string) {
 export async function GetUserStats(userId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('user-stats')
+        .from("user-stats")
         .select()
-        .eq('id', userId)
+        .eq("id", userId)
         .single();
 
     if (error) {
@@ -101,9 +101,9 @@ export async function UpdateUserStats(userStats: UserMatchStats) {
     currentStats.losses += userStats.won ? 0 : 1;
 
     const { error } = await supabase
-        .from('user-stats')
+        .from("user-stats")
         .update(currentStats)
-        .eq('id', userStats.id);
+        .eq("id", userStats.id);
 
     if (error) {
         console.log(error);

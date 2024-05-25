@@ -1,9 +1,9 @@
-import AuthButton from '@/components/AuthButton';
-import Footer from '@/components/Footer';
-import Menu from '@/components/menu/Menu';
-import UserSettingsForm from '@/components/user/UserSettingsForm';
-import { createClient } from '@/utils/supabase/server';
-import { redirect } from 'next/navigation';
+import AuthButton from "@/components/AuthButton";
+import Footer from "@/components/Footer";
+import Menu from "@/components/menu/Menu";
+import UserSettingsForm from "@/components/user/UserSettingsForm";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 
 export default async function Settings() {
     const supabase = createClient();
@@ -13,7 +13,7 @@ export default async function Settings() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect('/login');
+        return redirect("/login");
     }
     return (
         <div className="flex-1 w-full flex flex-col items-center gap-20 overflow-scroll">
@@ -34,7 +34,7 @@ export default async function Settings() {
                     </p>
                 </main>
                 <main className="flex-1 flex flex-col gap-6">
-                    <UserSettingsForm />
+                    <UserSettingsForm user={user} />
                 </main>
             </div>
 
