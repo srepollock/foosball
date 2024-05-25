@@ -49,7 +49,7 @@ export async function UpdateUserData(data: UserData) {
 
 export async function CreateUserStats(userId: string) {
     const supabase = createClient();
-    const { error } = await supabase.from("user-stats").insert({
+    const defaultUserData = {
         id: userId,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString(),
@@ -57,11 +57,14 @@ export async function CreateUserStats(userId: string) {
         goals: 0,
         wins: 0,
         losses: 0,
-    });
+    };
+    const { error } = await supabase.from("user-stats").insert(defaultUserData);
 
     if (error) {
         console.log(error);
     }
+
+    return defaultUserData;
 }
 
 export async function GetUserStats(userId: string) {

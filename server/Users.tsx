@@ -49,6 +49,7 @@ export async function fetchPlayerStats(userId: string) {
         .single();
     if (error) {
         console.error("Error fetching player stats:", error.message);
+        throw error;
     } else {
         return data;
     }

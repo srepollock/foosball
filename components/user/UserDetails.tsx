@@ -1,9 +1,10 @@
-'use client';
+"use client";
 
-import { UserData } from '@/models/UserData';
-import { UserStats } from '@/models/UserStats';
-import { fetchPlayer, fetchPlayerStats } from '@/server/Users';
-import { useEffect, useState } from 'react';
+import { UserData } from "@/models/UserData";
+import { UserStats } from "@/models/UserStats";
+import { CreateUserStats } from "@/server/UserData";
+import { fetchPlayer, fetchPlayerStats } from "@/server/Users";
+import { useEffect, useState } from "react";
 
 type UserDetailsProps = {
     id: string;
@@ -17,9 +18,15 @@ export default function UserDetails(props: UserDetailsProps) {
         fetchPlayer(props.id).then((data) => {
             setPlayer(data as UserData);
         });
-        fetchPlayerStats(props.id).then((data) => {
-            setPlayerStats(data as UserStats);
-        });
+        fetchPlayerStats(props.id)
+            .then((data) => {
+                setPlayerStats(data as UserStats);
+            })
+            .catch((error) => {
+                CreateUserStats(props.id).then((data) => {
+                    setPlayerStats(data as UserStats);
+                });
+            });
     }, []);
     return (
         <div className="flex flex-col w-full h-full text-gray-700 bg-gray-200 shadow-md rounded-xl bg-clip-border min-w-xs max-w-md sm:max-w-lg md:max-w-1xl lg:max-w-2xl xl:max-w-4xl">

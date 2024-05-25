@@ -6,7 +6,7 @@ import { SubmitButton } from "./submit-button";
 import { CreateUserData, CreateUserStats } from "@/server/UserData";
 import { ProfanityCheck } from "@/utils/ProfanityCheck";
 
-export default function Login({
+export default function SignUp({
     searchParams,
 }: {
     searchParams: { message: string };
