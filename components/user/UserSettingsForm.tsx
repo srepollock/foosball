@@ -1,6 +1,7 @@
 "use client";
 import { UserData } from "@/models/UserData";
 import { GetUserData, UpdateUserData } from "@/server/UserData";
+import { ProfanityCheck } from "@/utils/ProfanityCheck";
 import { createClient } from "@/utils/supabase/client";
 import { redirect } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -64,6 +65,13 @@ export default function UserSettingsForm(props: UserSettingsFormProps) {
                     className="bg-primary text-white rounded-lg p-2 bg-green-500"
                     onClick={async () => {
                         userData.full_name = `${userData.given_name} ${userData.sur_name}`;
+                        if (
+                            (await ProfanityCheck(userData.given_name)) ||
+                            (await ProfanityCheck(userData.sur_name)) ||
+                            (await ProfanityCheck(userData.full_name))
+                        ) {
+                            alert("Please enter a valid name");
+                        }
                         await UpdateUserData(userData).then(() => {
                             redirect("/settings");
                         });
