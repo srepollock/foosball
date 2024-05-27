@@ -1,15 +1,15 @@
-import { GeistSans } from "geist/font/sans";
-import "./globals.css";
-import Script from "next/script";
+import { GeistSans } from 'geist/font/sans';
+import './globals.css';
+import Script from 'next/script';
 
 const defaultUrl = process.env.VERCEL_URL
     ? `https://${process.env.VERCEL_URL}`
-    : "http://localhost:3000";
+    : 'http://localhost:3000';
 
 export const metadata = {
     metadataBase: new URL(defaultUrl),
-    title: "Foosball App",
-    description: "Keep track of all your foosball metrics!",
+    title: 'Foosball App',
+    description: 'Keep track of all your foosball metrics!',
 };
 
 export default function RootLayout({
@@ -115,7 +115,7 @@ export default function RootLayout({
                 <main className="min-h-screen flex flex-col items-center">
                     {children}
                 </main>
-                <Script src="/service-worker.js" />
+                {/* <Script src="/service-worker.js" /> */}
             </body>
         </html>
     );
