@@ -16,7 +16,7 @@ export default async function Settings() {
         return redirect("/login");
     }
     return (
-        <div className="flex-1 w-full flex flex-col items-center gap-20 overflow-scroll">
+        <div className="flex-1 w-full flex flex-col items-center gap-20">
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                     <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
