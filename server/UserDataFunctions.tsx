@@ -1,6 +1,6 @@
-import { UserData } from "@/models/UserData";
-import { UserMatchStats, UserStats } from "@/models/UserStats";
-import { createClient } from "@/utils/supabase/client";
+import { UserData } from '@/models/UserData';
+import { UserMatchStats, UserStats } from '@/models/UserStats';
+import { createClient } from '@/utils/supabase/client';
 
 export async function CreateUserData(
     userId: string,
@@ -8,28 +8,71 @@ export async function CreateUserData(
     sur_name: string
 ) {
     const supabase = createClient();
-    const { error } = await supabase.from("user-data").insert({
+    const { error } = await supabase.from('user-data').insert({
         id: userId,
         given_name: given_name,
         sur_name: sur_name,
-        full_name: given_name + " " + sur_name,
+        full_name: given_name + ' ' + sur_name,
     });
 
     if (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
 export async function GetUserData(userId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from("user-data")
+        .from('user-data')
         .select()
-        .eq("id", userId)
+        .eq('id', userId)
         .single();
 
     if (error) {
-        console.log(error);
+        console.error(error);
+        return {};
+    }
+
+    return data;
+}
+
+export async function GetAllUsersData() {
+    const supabase = createClient();
+    const { data, error } = await supabase.from('user-data').select();
+
+    if (error) {
+        console.error(error);
+        return [];
+    }
+
+    return data;
+}
+
+export async function GetUserIdFullNameData(userId: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from('user-data')
+        .select('id, full_name')
+        .eq('id', userId)
+        .single();
+
+    if (error) {
+        console.error(error);
+        return {};
+    }
+
+    return data;
+}
+
+export async function GetAllUserIdFullNamesData() {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from('user-data')
+        .select('id, full_name');
+
+    if (error) {
+        console.error(error);
+        return [];
     }
 
     return data;
@@ -38,12 +81,12 @@ export async function GetUserData(userId: string) {
 export async function UpdateUserData(data: UserData) {
     const supabase = createClient();
     const { error } = await supabase
-        .from("user-data")
+        .from('user-data')
         .update(data)
-        .eq("id", data.id);
+        .eq('id', data.id);
 
     if (error) {
-        console.log(error);
+        console.error(error);
     }
 }
 
@@ -58,10 +101,11 @@ export async function CreateUserStats(userId: string) {
         wins: 0,
         losses: 0,
     };
-    const { error } = await supabase.from("user-stats").insert(defaultUserData);
+    const { error } = await supabase.from('user-stats').insert(defaultUserData);
 
     if (error) {
-        console.log(error);
+        console.error(error);
+        return {};
     }
 
     return defaultUserData;
@@ -70,13 +114,14 @@ export async function CreateUserStats(userId: string) {
 export async function GetUserStats(userId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from("user-stats")
+        .from('user-stats')
         .select()
-        .eq("id", userId)
+        .eq('id', userId)
         .single();
 
     if (error) {
-        console.log(error);
+        console.error(error);
+        return {};
     }
 
     return data;
@@ -104,11 +149,11 @@ export async function UpdateUserStats(userStats: UserMatchStats) {
     currentStats.losses += userStats.won ? 0 : 1;
 
     const { error } = await supabase
-        .from("user-stats")
+        .from('user-stats')
         .update(currentStats)
-        .eq("id", userStats.id);
+        .eq('id', userStats.id);
 
     if (error) {
-        console.log(error);
+        console.error(error);
     }
 }

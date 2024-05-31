@@ -1,23 +1,8 @@
-import { createClient } from '@/utils/supabase/server';
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
 import { SubmitButton } from '../login/submit-button';
+import { forgotPassword } from '@/utils/ForgotPassword';
 
 export default function ForgotPassword() {
-    const forgotPassword = async (formData: FormData) => {
-        'use server';
-        const email = formData.get('email') as string;
-        const supabase = createClient();
-        const { error } = await supabase.auth.resetPasswordForEmail(email);
-        if (error) {
-            return redirect('/login?message=Could not authenticate user');
-        }
-
-        return redirect(
-            '/login?message=Check email to continue sign in process'
-        );
-    };
-
     return (
         <div className="flex-1 flex flex-col w-full px-8 sm:max-w-md justify-center gap-2">
             <div>

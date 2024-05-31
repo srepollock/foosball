@@ -1,10 +1,10 @@
-"use client";
-import { UserData } from "@/models/UserData";
-import { GetUserData, UpdateUserData } from "@/server/UserData";
-import { ProfanityCheck } from "@/utils/ProfanityCheck";
-import { createClient } from "@/utils/supabase/client";
-import { redirect } from "next/navigation";
-import { useEffect, useState } from "react";
+'use client';
+import { UserData } from '@/models/UserData';
+import { GetUserData, UpdateUserData } from '@/server/UserDataFunctions';
+import { ProfanityCheck } from '@/utils/ProfanityCheck';
+import { createClient } from '@/utils/supabase/client';
+import { redirect } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 type UserSettingsFormProps = {
     user: any;
@@ -29,7 +29,7 @@ export default function UserSettingsForm(props: UserSettingsFormProps) {
                     type="email"
                     className="w-full p-2 rounded-lg text-black"
                     id="email"
-                    defaultValue={props.user?.email ?? ""}
+                    defaultValue={props.user?.email ?? ''}
                     required
                     readOnly
                 />
@@ -38,7 +38,7 @@ export default function UserSettingsForm(props: UserSettingsFormProps) {
                     type="text"
                     className="w-full p-2 rounded-lg text-black"
                     id="given_name"
-                    defaultValue={userData.given_name ?? ""}
+                    defaultValue={userData.given_name ?? ''}
                     onChange={(e) => {
                         setUserData({
                             ...userData,
@@ -52,7 +52,7 @@ export default function UserSettingsForm(props: UserSettingsFormProps) {
                     type="text"
                     className="w-full p-2 rounded-lg text-black"
                     id="sur_name"
-                    defaultValue={userData.sur_name ?? ""}
+                    defaultValue={userData.sur_name ?? ''}
                     onChange={(e) => {
                         setUserData({
                             ...userData,
@@ -70,10 +70,10 @@ export default function UserSettingsForm(props: UserSettingsFormProps) {
                             (await ProfanityCheck(userData.sur_name)) ||
                             (await ProfanityCheck(userData.full_name))
                         ) {
-                            alert("Please enter a valid name");
+                            alert('Please enter a valid name');
                         }
                         await UpdateUserData(userData).then(() => {
-                            redirect("/settings");
+                            redirect('/settings');
                         });
                     }}
                 >

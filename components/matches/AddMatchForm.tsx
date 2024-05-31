@@ -1,12 +1,14 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import AddMatchButton from "./AddMatchButton";
-import { handleAddMatch } from "@/server/Matches";
-import { fetchPlayers } from "@/server/Users";
-import { MatchData, Team } from "@/models/MatchData";
-import { UpdateUserStats } from "@/server/UserData";
-import { UserMatchStats } from "@/models/UserStats";
+import { useState, useEffect } from 'react';
+import AddMatchButton from './AddMatchButton';
+import { handleAddMatch } from '@/server/MatchFunctions';
+import { MatchData, Team } from '@/models/MatchData';
+import {
+    GetAllUserIdFullNamesData,
+    UpdateUserStats,
+} from '@/server/UserDataFunctions';
+import { UserMatchStats } from '@/models/UserStats';
 
 type PlayerData = {
     id: any;
@@ -18,11 +20,11 @@ export default function AddMatchForm() {
 
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
-    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState("");
+    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState('');
     const [homeDefendersPlayer, setHomeDefendersPlayer] = useState<
         String | undefined
     >(undefined);
-    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState("");
+    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState('');
     const [awayDefendersPlayer, setAwayDefendersPlayer] = useState<
         String | undefined
     >(undefined);
@@ -36,7 +38,7 @@ export default function AddMatchForm() {
     >(undefined);
 
     useEffect(() => {
-        fetchPlayers().then((data) => {
+        GetAllUserIdFullNamesData().then((data) => {
             setPlayers(data as PlayerData[]);
         });
     }, []);
@@ -164,13 +166,13 @@ export default function AddMatchForm() {
                         if (homeScore >= 8 || awayScore >= 8) {
                             if (Math.abs(homeScore - awayScore) < 2) {
                                 alert(
-                                    "Winning team must win by at least 2 goals. Invalid game."
+                                    'Winning team must win by at least 2 goals. Invalid game.'
                                 );
                                 return;
                             }
                         } else {
                             alert(
-                                "Winning score must be equal to or greater than 8. Invalid game."
+                                'Winning score must be equal to or greater than 8. Invalid game.'
                             );
                             return;
                         }

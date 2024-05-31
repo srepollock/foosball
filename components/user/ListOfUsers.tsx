@@ -1,13 +1,13 @@
 'use client';
 
 import { UserData } from '@/models/UserData';
-import { fetchPlayers } from '@/server/Users';
+import { GetAllUsersData } from '@/server/UserDataFunctions';
 import { useEffect, useState } from 'react';
 
 export default function ListOfUsers() {
     const [users, setUsers] = useState<UserData[]>([]);
     useEffect(() => {
-        fetchPlayers().then((data) => {
+        GetAllUsersData().then((data: UserData[]) => {
             setUsers(data as UserData[]);
         });
     }, []);

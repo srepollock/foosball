@@ -1,15 +1,9 @@
 'use client';
 import { MatchData } from '@/models/MatchData';
-import { fetchMatches, calculateTotalMatches } from '@/server/Matches';
-import { createClient } from '@/utils/supabase/client';
+import { fetchMatches, calculateTotalMatches } from '@/server/MatchFunctions';
 import { useEffect, useState } from 'react';
-import { redirect } from 'next/navigation';
-import { fetchPlayers } from '@/server/Users';
-
-type PlayerData = {
-    id: string;
-    full_name: string;
-};
+import { UserIdFullNameData } from '@/models/UserData';
+import { GetAllUserIdFullNamesData } from '@/server/UserDataFunctions';
 
 type RecentMatchesProps = {
     page: number;
@@ -21,7 +15,7 @@ export default function RecentMatches(props: RecentMatchesProps) {
     const [update, setUpdate] = useState(true);
     const [page, setPage] = useState<number>(0);
     const [pages, setPages] = useState<Array<number>>([]);
-    const [players, setPlayers] = useState<PlayerData[]>([]);
+    const [players, setPlayers] = useState<UserIdFullNameData[]>([]);
 
     useEffect(() => {
         setUpdate(true);
@@ -41,8 +35,8 @@ export default function RecentMatches(props: RecentMatchesProps) {
     }, []);
 
     useEffect(() => {
-        fetchPlayers().then((data) => {
-            setPlayers(data as PlayerData[]);
+        GetAllUserIdFullNamesData().then((data) => {
+            setPlayers(data as UserIdFullNameData[]);
         });
         fetchMatches(page, props.userId).then((data) => {
             if (data) {

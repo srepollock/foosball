@@ -11,7 +11,7 @@ export async function fetchMatches(page: number, userId?: string) {
             .select()
             .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
         if (error) {
-            console.log(error);
+            console.error(error);
         }
         return data;
     } else {
@@ -23,7 +23,7 @@ export async function fetchMatches(page: number, userId?: string) {
             )
             .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
         if (error) {
-            console.log(error);
+            console.error(error);
         }
         return data;
     }
@@ -37,7 +37,7 @@ export async function fetchMatch(matchId: string) {
         .eq('id', matchId)
         .single();
     if (error) {
-        console.log(error);
+        console.error(error);
     }
     return data;
 }
@@ -47,7 +47,7 @@ export async function calculateTotalMatches(userId?: string) {
     if (!userId) {
         const { data, error } = await supabase.from('matches').select('id');
         if (error) {
-            console.log(error);
+            console.error(error);
         }
         return data?.length;
     } else {
@@ -58,7 +58,7 @@ export async function calculateTotalMatches(userId?: string) {
                 `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
             );
         if (error) {
-            console.log(error);
+            console.error(error);
         }
         return data?.length;
     }

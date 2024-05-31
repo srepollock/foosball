@@ -1,10 +1,13 @@
-"use client";
+'use client';
 
-import { UserData } from "@/models/UserData";
-import { UserStats } from "@/models/UserStats";
-import { CreateUserStats } from "@/server/UserData";
-import { fetchPlayer, fetchPlayerStats } from "@/server/Users";
-import { useEffect, useState } from "react";
+import { UserData } from '@/models/UserData';
+import { UserStats } from '@/models/UserStats';
+import {
+    CreateUserStats,
+    GetUserData,
+    GetUserStats,
+} from '@/server/UserDataFunctions';
+import { useEffect, useState } from 'react';
 
 type UserDetailsProps = {
     id: string;
@@ -15,21 +18,22 @@ export default function UserDetails(props: UserDetailsProps) {
     const [playerStats, setPlayerStats] = useState<UserStats>();
 
     useEffect(() => {
-        fetchPlayer(props.id).then((data) => {
+        GetUserData(props.id).then((data) => {
             setPlayer(data as UserData);
         });
-        fetchPlayerStats(props.id)
+        GetUserStats(props.id)
             .then((data) => {
                 setPlayerStats(data as UserStats);
             })
             .catch((error) => {
+                console.debug('User stats not found, creating new stats');
                 CreateUserStats(props.id).then((data) => {
                     setPlayerStats(data as UserStats);
                 });
             });
     }, []);
     return (
-        <div className="flex flex-col w-full h-full text-gray-700 bg-gray-200 shadow-md rounded-xl bg-clip-border min-w-xs max-w-md sm:max-w-lg md:max-w-1xl lg:max-w-2xl xl:max-w-4xl">
+        <div className="flex flex-col w-full h-full text-gray-700 bg-gray-200 shadow-md rounded-xl bg-clip-border min-w-xs max-w-md sm:max-w-lg md:max-w-1xl lg:max-w-2xl xl:max-w-4xl overflow-scroll">
             <div className="p-6 px-0">
                 <table className="w-full text-left table-auto min-w-max">
                     <thead>

@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { SubmitButton } from './submit-button';
-import { CreateUserData, CreateUserStats } from '@/server/UserData';
+import { CreateUserData, CreateUserStats } from '@/server/UserDataFunctions';
 import { ProfanityCheck } from '@/utils/ProfanityCheck';
 
 export default function SignUp({

@@ -1,8 +1,8 @@
-"use client";
-import { MatchData } from "@/models/MatchData";
-import { fetchMatch } from "@/server/Matches";
-import { fetchPlayers } from "@/server/Users";
-import { useEffect, useState } from "react";
+'use client';
+import { MatchData } from '@/models/MatchData';
+import { fetchMatch } from '@/server/MatchFunctions';
+import { GetAllUserIdFullNamesData } from '@/server/UserDataFunctions';
+import { useEffect, useState } from 'react';
 
 type PlayerData = {
     id: string;
@@ -19,7 +19,7 @@ export default function MatchDetails(props: MatchDetailsProps) {
         fetchMatch(props.id).then((data) => {
             setMatch(data as MatchData);
         });
-        fetchPlayers().then((data) => {
+        GetAllUserIdFullNamesData().then((data) => {
             setPlayers(data as PlayerData[]);
         });
     }, []);
