@@ -1,10 +1,10 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
-import { CreateUserData, CreateUserStats } from "@/server/UserData";
-import { ProfanityCheck } from "@/utils/ProfanityCheck";
+import Link from 'next/link';
+import { headers } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import { SubmitButton } from './submit-button';
+import { CreateUserData, CreateUserStats } from '@/server/UserData';
+import { ProfanityCheck } from '@/utils/ProfanityCheck';
 
 export default function SignUp({
     searchParams,
@@ -12,13 +12,13 @@ export default function SignUp({
     searchParams: { message: string };
 }) {
     const signUp = async (formData: FormData) => {
-        "use server";
+        'use server';
 
-        const origin = headers().get("origin");
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const given_name = formData.get("given_name") as string;
-        const sur_name = formData.get("sur_name") as string;
+        const origin = headers().get('origin');
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
+        const given_name = formData.get('given_name') as string;
+        const sur_name = formData.get('sur_name') as string;
         const supabase = createClient();
 
         let { data, error } = await supabase.auth.signUp({
@@ -31,15 +31,15 @@ export default function SignUp({
 
         if (error) {
             console.log(error);
-            return redirect("/login?message=Could not create user");
+            return redirect('/login?message=Could not create user');
         }
 
         if (await ProfanityCheck(given_name)) {
-            return redirect("/login?message=Given name contains profanity");
+            return redirect('/login?message=Given name contains profanity');
         }
 
         if (await ProfanityCheck(sur_name)) {
-            return redirect("/login?message=Sur name contains profanity");
+            return redirect('/login?message=Sur name contains profanity');
         }
 
         await CreateUserData(data.user!.id, given_name, sur_name);
@@ -48,12 +48,12 @@ export default function SignUp({
 
         if (error) {
             return redirect(
-                "/login?message=Could not create a user data record. Please contact support."
+                '/login?message=Could not create a user data record. Please contact support.'
             );
         }
 
         return redirect(
-            "/login?message=Check email to continue sign in process"
+            '/login?message=Check email to continue sign in process'
         );
     };
 
@@ -76,11 +76,11 @@ export default function SignUp({
                     className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
                 >
                     <polyline points="15 18 9 12 15 6" />
-                </svg>{" "}
+                </svg>{' '}
                 Back
             </Link>
 
-            <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
+            <form className="animate-in flex flex-col w-full justify-center gap-2 text-foreground">
                 <label className="text-md" htmlFor="email">
                     First name
                 </label>

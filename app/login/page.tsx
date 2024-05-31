@@ -1,10 +1,11 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import { SubmitButton } from "./submit-button";
-import { CreateUserData } from "@/server/UserData";
-import SignUpButton from "@/components/SignUpButton";
+import Link from 'next/link';
+import { headers } from 'next/headers';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
+import { SubmitButton } from './submit-button';
+import { CreateUserData } from '@/server/UserData';
+import SignUpButton from '@/components/SignUpButton';
+import ForgotPasswordButton from '@/components/ForgotPasswordButton';
 
 export default function Login({
     searchParams,
@@ -12,10 +13,10 @@ export default function Login({
     searchParams: { message: string };
 }) {
     const signIn = async (formData: FormData) => {
-        "use server";
+        'use server';
 
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
         const supabase = createClient();
 
         const { error } = await supabase.auth.signInWithPassword({
@@ -24,60 +25,23 @@ export default function Login({
         });
 
         if (error) {
-            return redirect("/login?message=Could not authenticate user");
+            return redirect('/login?message=Could not authenticate user');
         }
 
-        return redirect("/dashboard");
-    };
-
-    const signUp = async (formData: FormData) => {
-        "use server";
-
-        const origin = headers().get("origin");
-        const email = formData.get("email") as string;
-        const password = formData.get("password") as string;
-        const supabase = createClient();
-
-        let { data, error } = await supabase.auth.signUp({
-            email,
-            password,
-            options: {
-                emailRedirectTo: `${origin}/auth/callback`,
-            },
-        });
-
-        if (error) {
-            return redirect("/login?message=Could not authenticate user");
-        }
-
-        await CreateUserData(
-            data.user!.id,
-            formData.get("given_name") as string,
-            formData.get("sur_name") as string
-        );
-
-        if (error) {
-            return redirect(
-                "/login?message=Could not create a user data record. Please contact support."
-            );
-        }
-
-        return redirect(
-            "/login?message=Check email to continue sign in process"
-        );
+        return redirect('/dashboard');
     };
 
     const forgotPassword = async (formData: FormData) => {
-        "use server";
-        const email = formData.get("email") as string;
+        'use server';
+        const email = formData.get('email') as string;
         const supabase = createClient();
         const { error } = await supabase.auth.resetPasswordForEmail(email);
         if (error) {
-            return redirect("/login?message=Could not authenticate user");
+            return redirect('/login?message=Could not authenticate user');
         }
 
         return redirect(
-            "/login?message=Check email to continue sign in process"
+            '/login?message=Check email to continue sign in process'
         );
     };
 
@@ -100,11 +64,11 @@ export default function Login({
                     className="mr-2 h-4 w-4 transition-transform group-hover:-translate-x-1"
                 >
                     <polyline points="15 18 9 12 15 6" />
-                </svg>{" "}
+                </svg>{' '}
                 Back
             </Link>
 
-            <form className="animate-in flex-1 flex flex-col w-full justify-center gap-2 text-foreground">
+            <form className="animate-in flex flex-col w-full justify-center gap-2 text-foreground">
                 <label className="text-md" htmlFor="email">
                     Email
                 </label>
@@ -132,13 +96,7 @@ export default function Login({
                     Sign In
                 </SubmitButton>
                 <SignUpButton />
-                <SubmitButton
-                    formAction={forgotPassword}
-                    className="bg-red-700 rounded-md px-4 py-2 text-foreground mb-2"
-                    pendingText="Sending..."
-                >
-                    Forgot Password
-                </SubmitButton>
+                <ForgotPasswordButton />
                 {searchParams?.message && (
                     <p className="mt-4 p-4 bg-foreground/10 text-foreground text-center">
                         {searchParams.message}
