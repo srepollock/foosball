@@ -3,7 +3,7 @@ import { headers } from 'next/headers';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
 import { SubmitButton } from './submit-button';
-import { CreateUserData, CreateUserStats } from '@/server/UserDataFunctions';
+import { CreateUserData } from '@/server/UserDataFunctions';
 import { ProfanityCheck } from '@/utils/ProfanityCheck';
 
 export default function SignUp({
@@ -43,8 +43,6 @@ export default function SignUp({
         }
 
         await CreateUserData(data.user!.id, given_name, sur_name);
-
-        await CreateUserStats(data.user!.id);
 
         if (error) {
             return redirect(

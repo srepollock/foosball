@@ -2,11 +2,7 @@
 
 import { UserData } from '@/models/UserData';
 import { UserStats } from '@/models/UserStats';
-import {
-    CreateUserStats,
-    GetUserData,
-    GetUserStats,
-} from '@/server/UserDataFunctions';
+import { GetUserData, GetUserStats } from '@/server/UserDataFunctions';
 import { useEffect, useState } from 'react';
 
 type UserDetailsProps = {
@@ -26,10 +22,7 @@ export default function UserDetails(props: UserDetailsProps) {
                 setPlayerStats(data as UserStats);
             })
             .catch((error) => {
-                console.debug('User stats not found, creating new stats');
-                CreateUserStats(props.id).then((data) => {
-                    setPlayerStats(data as UserStats);
-                });
+                console.error(error);
             });
     }, []);
     return (

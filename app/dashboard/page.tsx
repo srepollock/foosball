@@ -1,11 +1,11 @@
-import AuthButton from "@/components/AuthButton";
-import Footer from "@/components/Footer";
-import AddMatchForm from "@/components/matches/AddMatchForm";
-import RecentMatches from "@/components/matches/RecentMatches";
-import Menu from "@/components/menu/Menu";
-import DashboardHeader from "@/components/user/DashboardHeader";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import AuthButton from '@/components/AuthButton';
+import Footer from '@/components/Footer';
+import AddMatchForm from '@/components/matches/AddMatchForm';
+import RecentMatches from '@/components/matches/RecentMatches';
+import NavMenu from '@/components/navmenu/NavMenu';
+import DashboardHeader from '@/components/user/DashboardHeader';
+import { createClient } from '@/utils/supabase/server';
+import { redirect } from 'next/navigation';
 
 export default async function Dashboard() {
     const supabase = createClient();
@@ -15,15 +15,15 @@ export default async function Dashboard() {
     } = await supabase.auth.getUser();
 
     if (!user) {
-        return redirect("/login");
+        return redirect('/login');
     }
     return (
         <div className="flex-1 w-full flex flex-col items-center gap-20">
             <div className="w-full">
                 <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
                     <div className="w-full max-w-4xl flex justify-between items-center p-3 text-sm">
-                        <Menu />
-                        <AuthButton />
+                        <NavMenu pageName="Dashboard" />
+                        {/* <AuthButton /> */}
                     </div>
                 </nav>
             </div>

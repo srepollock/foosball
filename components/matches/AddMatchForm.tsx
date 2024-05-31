@@ -4,11 +4,7 @@ import { useState, useEffect } from 'react';
 import AddMatchButton from './AddMatchButton';
 import { handleAddMatch } from '@/server/MatchFunctions';
 import { MatchData, Team } from '@/models/MatchData';
-import {
-    GetAllUserIdFullNamesData,
-    UpdateUserStats,
-} from '@/server/UserDataFunctions';
-import { UserMatchStats } from '@/models/UserStats';
+import { GetAllUserIdFullNamesData } from '@/server/UserDataFunctions';
 
 type PlayerData = {
     id: any;
@@ -193,27 +189,6 @@ export default function AddMatchForm() {
                             winner:
                                 homeScore > awayScore ? Team.HOME : Team.AWAY,
                         } as MatchData);
-
-                        UpdateUserStats({
-                            id: homeForwardsPlayer,
-                            goals: homeForwardsScore,
-                            won: homeScore > awayScore,
-                        } as UserMatchStats);
-                        UpdateUserStats({
-                            id: homeDefendersPlayer,
-                            goals: homeDefendersScore ?? 0,
-                            won: homeScore > awayScore,
-                        } as UserMatchStats);
-                        UpdateUserStats({
-                            id: awayForwardsPlayer,
-                            goals: awayForwardsScore,
-                            won: awayScore > homeScore,
-                        } as UserMatchStats);
-                        UpdateUserStats({
-                            id: awayDefendersPlayer,
-                            goals: awayDefendersScore ?? 0,
-                            won: awayScore > homeScore,
-                        } as UserMatchStats);
                     }}
                 />
             </form>

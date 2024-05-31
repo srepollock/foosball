@@ -1,5 +1,5 @@
 import { UserData } from '@/models/UserData';
-import { UserMatchStats, UserStats } from '@/models/UserStats';
+import { UserStats } from '@/models/UserStats';
 import { createClient } from '@/utils/supabase/client';
 
 export async function CreateUserData(
@@ -90,70 +90,68 @@ export async function UpdateUserData(data: UserData) {
     }
 }
 
-export async function CreateUserStats(userId: string) {
-    const supabase = createClient();
-    const defaultUserData = {
-        id: userId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-        games_played: 0,
-        goals: 0,
-        wins: 0,
-        losses: 0,
-    };
-    const { error } = await supabase.from('user-stats').insert(defaultUserData);
-
-    if (error) {
-        console.error(error);
-        return {};
-    }
-
-    return defaultUserData;
-}
-
 export async function GetUserStats(userId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('user-stats')
-        .select()
-        .eq('id', userId)
-        .single();
+        .from('matches')
+        .select('*')
+        .or(
+            `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
+        )
+        .order('played_at', { ascending: false });
 
     if (error) {
         console.error(error);
         return {};
     }
 
-    return data;
-}
+    let lastMatch = data[0];
+    let goals = 0;
+    let wins = 0;
+    let losses = 0;
+    data.forEach((element) => {
+        switch (userId) {
+            case element.home_forward:
+                goals += element.home_forward_goals;
+                if (element.winner === 'HOME') {
+                    wins++;
+                } else {
+                    losses++;
+                }
+                break;
+            case element.home_defense:
+                goals += element.home_defense_goals;
+                if (element.winner === 'HOME') {
+                    wins++;
+                } else {
+                    losses++;
+                }
+                break;
+            case element.away_forward:
+                goals += element.away_forward_goals;
+                if (element.winner === 'AWAY') {
+                    wins++;
+                } else {
+                    losses++;
+                }
+                break;
+            case element.away_defense:
+                goals += element.away_defense_goals;
+                if (element.winner === 'AWAY') {
+                    wins++;
+                } else {
+                    losses++;
+                }
+                break;
+        }
+    });
 
-export async function UpdateUserStats(userStats: UserMatchStats) {
-    const supabase = createClient();
-
-    let currentStats = await GetUserStats(userStats.id);
-
-    if (!currentStats) {
-        currentStats = {} as UserStats;
-        currentStats.id = userStats.id;
-        currentStats.created_at = new Date().toISOString();
-        currentStats.updated_at = new Date().toISOString();
-        currentStats.games_played = 0;
-        currentStats.goals = 0;
-        currentStats.wins = 0;
-        currentStats.losses = 0;
-    }
-
-    currentStats.games_played += 1;
-    currentStats.goals += userStats.goals;
-    currentStats.wins += userStats.won ? 1 : 0;
-    currentStats.losses += userStats.won ? 0 : 1;
-
-    const { error } = await supabase
-        .from('user-stats')
-        .update(currentStats)
-        .eq('id', userStats.id);
-
-    if (error) {
-        console.error(error);
-    }
+    return {
+        id: userId,
+        updated_at: lastMatch.played_at,
+        games_played: data.length,
+        goals: goals,
+        wins: wins,
+        losses: losses,
+    } as UserStats;
 }
