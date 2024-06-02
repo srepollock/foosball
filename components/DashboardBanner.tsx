@@ -1,7 +1,7 @@
 import NextLogo from "./NextLogo";
 import SupabaseLogo from "./SupabaseLogo";
 
-export default function Header() {
+export default function DashboardBanner() {
     return (
         <div className="flex flex-col gap-16 items-center">
             <h1 className="sr-only">?</h1>

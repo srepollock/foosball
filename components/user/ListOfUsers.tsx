@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { UserData } from '@/models/UserData';
-import { GetAllUsersData } from '@/server/UserDataFunctions';
-import { useEffect, useState } from 'react';
+import { UserData } from "@/models/UserData";
+import { GetAllUsersData } from "@/server/UserDataFunctions";
+import { useEffect, useState } from "react";
 
 export default function ListOfUsers() {
     const [users, setUsers] = useState<UserData[]>([]);
@@ -32,7 +32,7 @@ export default function ListOfUsers() {
                                 className="bg-slate-200 hover:bg-slate-500 focus:bg-gray-300 active:bg-red-200 text-black hover:text-black focus:text-black active:text-black"
                             >
                                 <td className="border px-8 py-4">
-                                    <a href={`/user/${user.id}`}>{user.id}</a>
+                                    <a href={`/player/${user.id}`}>{user.id}</a>
                                 </td>
                                 <td className="border px-8 py-4">
                                     {user.full_name}
