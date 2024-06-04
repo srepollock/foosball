@@ -1,3 +1,4 @@
+"use client";
 import { Team } from "@/models/TeamsData";
 import { fetchAllTeams } from "@/server/TeamFunctions";
 import { createClient } from "@/utils/supabase/client";
