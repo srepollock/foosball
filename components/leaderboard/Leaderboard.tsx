@@ -73,12 +73,14 @@ export default function Leaderboard() {
                                             {index + 1}
                                         </td>
                                         <td className="border px-8 py-4">
-                                            {
-                                                players.find(
-                                                    (player) =>
-                                                        player.id === key
-                                                )?.full_name
-                                            }
+                                            <a href={`/player/${key}`}>
+                                                {
+                                                    players.find(
+                                                        (player) =>
+                                                            player.id === key
+                                                    )?.full_name
+                                                }
+                                            </a>
                                         </td>
                                         <td className="border px-8 py-4">
                                             {stats[key].goals}

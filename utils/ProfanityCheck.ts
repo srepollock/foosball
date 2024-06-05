@@ -1,4 +1,7 @@
 export async function ProfanityCheck(text: string) {
+    if (text === '') {
+        return false;
+    }
     const res = await fetch("https://vector.profanity.dev", {
         method: "POST",
         headers: { "Content-Type": "application/json" },

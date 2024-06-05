@@ -2,17 +2,30 @@
 import { UserData } from '@/models/UserData';
 import { CreateTeam } from '@/server/TeamFunctions';
 import { GetAllUsersData } from '@/server/UserDataFunctions';
+import { ProfanityCheck } from '@/utils/ProfanityCheck';
 import { useEffect, useState } from 'react';
 
 export default function NewTeamForm() {
     const [players, setPlayers] = useState<UserData[]>([]);
     const [forward, setForward] = useState<string>('');
     const [defender, setDefender] = useState<string>('');
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
         // Handle form submission
         var teamName = e?.target?.teamName.value as string;
-        CreateTeam(teamName, forward, defender);
+        if (await ProfanityCheck(teamName)) {
+            var message = `Profanity detected in the Team Name: ${teamName}. Please clean it up.`;
+            console.error(message);
+            alert(message);
+            return;
+        }
+        if (forward === defender) {
+            var message = `Forward and Defender cannot be the same player.`;
+            console.error(message);
+            alert(message);
+            return;
+        }
+        CreateTeam(forward, defender, teamName);
     };
 
     const handleForwardChanged = (e: any) => {

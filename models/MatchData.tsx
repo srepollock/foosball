@@ -18,6 +18,10 @@ export type MatchData = {
     score_home: number;
     score_away: number;
     winner: Team;
+    tournament_id?: string;
+    tournament_round_id?: string;
+    home_team_id?: string;
+    away_team_id?: string;
 };
 
 export const DefaultMatchData: MatchData = {

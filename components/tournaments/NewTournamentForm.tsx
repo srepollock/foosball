@@ -1,10 +1,11 @@
 'use client';
 
 import { TeamData } from '@/models/TeamsData';
-import { fetchAllTeams } from '@/server/TeamFunctions';
+import { GetAllTeams } from '@/server/TeamFunctions';
 import { create } from 'domain';
 import { useEffect, useState } from 'react';
 import TeamSelectFormInput from './TeamFormInput';
+import { ProfanityCheck } from '@/utils/ProfanityCheck';
 
 type TournamentFormProps = {};
 
@@ -19,12 +20,15 @@ export default function NewTournamentForm() {
         HTMLInputElement[]
     >([]);
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-    };
-
-    const handleReset = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
+        var tournamentName = e?.target?.tournamentName.value as string;
+        if (await ProfanityCheck(tournamentName)) {
+            var message = `Profanity detected in the Tournament Name: ${tournamentName}. Please clean it up.`;
+            console.error(message);
+            alert(message);
+            return;
+        }
     };
 
     const handleAddTeam = () => {
@@ -36,12 +40,14 @@ export default function NewTournamentForm() {
 
     const createTeamInputs = (teamSelectionInputs: HTMLInputElement[]) => {
         return teamSelectionInputs.map((item, index) => {
-            return <TeamSelectFormInput key={index} teams={teams} />;
+            return (
+                <TeamSelectFormInput key={index} index={index} teams={teams} />
+            );
         });
     };
 
     useEffect(() => {
-        fetchAllTeams().then((teams) => {
+        GetAllTeams().then((teams) => {
             setTeams(teams);
         });
     }, []);
@@ -52,20 +58,24 @@ export default function NewTournamentForm() {
             <form
                 className="flex-1 flex flex-col gap-6"
                 onSubmit={handleSubmit}
-                onReset={handleReset}
             >
                 <label className="text-lg">Tournament Name</label>
                 <input
                     type="text"
+                    name="tournamentName"
                     className="border border-gray-300 p-2 text-black"
                 />
                 <label className="text-lg">Description</label>
                 <input
                     type="text"
+                    name="description"
                     className="border border-gray-300 p-2 text-black"
                 />
                 <label className="text-lg">Tournament Type</label>
-                <select className="border border-gray-300 p-2 text-black">
+                <select
+                    className="border border-gray-300 p-2 text-black"
+                    name="tournamentType"
+                >
                     <option value={TournamentType.SINGLE_ELIMINATION}>
                         {TournamentType.SINGLE_ELIMINATION}
                     </option>
