@@ -10,7 +10,7 @@ type TeamSelectFormInputProps = {
 
 export default function TeamSelectFormInput(props: TeamSelectFormInputProps) {
     return (
-        <select className="border border-gray-300 p-2">
+        <select className="border border-gray-300 p-2 text-black">
             <option value="">Select a team</option>
             {props.teams.map((team: TeamData) => (
                 <option key={team.id} value={team.id}>

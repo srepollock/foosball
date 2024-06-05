@@ -47,18 +47,25 @@ export default function NewTournamentForm() {
     }, []);
 
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex-1 flex flex-col gap-6 items-center">
+            <h1 className="text-2xl">Create a New Tournament</h1>
             <form
                 className="flex-1 flex flex-col gap-6"
                 onSubmit={handleSubmit}
                 onReset={handleReset}
             >
                 <label className="text-lg">Tournament Name</label>
-                <input type="text" className="border border-gray-300 p-2" />
+                <input
+                    type="text"
+                    className="border border-gray-300 p-2 text-black"
+                />
                 <label className="text-lg">Description</label>
-                <input type="date" className="border border-gray-300 p-2" />
+                <input
+                    type="text"
+                    className="border border-gray-300 p-2 text-black"
+                />
                 <label className="text-lg">Tournament Type</label>
-                <select className="border border-gray-300 p-2">
+                <select className="border border-gray-300 p-2 text-black">
                     <option value={TournamentType.SINGLE_ELIMINATION}>
                         {TournamentType.SINGLE_ELIMINATION}
                     </option>
