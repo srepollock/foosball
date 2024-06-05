@@ -106,7 +106,8 @@ export async function GetUserStats(userId: string) {
     }
 
     if (!data || data.length === 0) {
-        return DefaultUserStats;
+        let stats = DefaultUserStats(userId);
+        return stats;
     }
 
     let lastMatch = data[0];

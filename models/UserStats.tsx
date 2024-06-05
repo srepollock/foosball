@@ -7,7 +7,7 @@ export type UserStats = {
     losses?: number;
 };
 
-export const DefaultUserStats: UserStats = {
+export const DefaultUserStatsObject: UserStats = {
     id: '',
     updated_at: new Date().toISOString(),
     games_played: 0,
@@ -15,3 +15,14 @@ export const DefaultUserStats: UserStats = {
     wins: 0,
     losses: 0,
 };
+
+export function DefaultUserStats(id: string) {
+    return {
+        id: id,
+        updated_at: new Date().toISOString(),
+        games_played: 0,
+        goals: 0,
+        wins: 0,
+        losses: 0,
+    } as UserStats;
+}
