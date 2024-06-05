@@ -1,4 +1,6 @@
 export type TournamentBracketObject = {
+    name: string;
+    description: string;
     brackets: TournamentBracketMatchupObject[];
 };
 

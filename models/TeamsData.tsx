@@ -1,4 +1,4 @@
-export type Team = {
+export type TeamData = {
     id: string;
     created_at: string;
     forward: string;

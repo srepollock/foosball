@@ -1,5 +1,5 @@
 import { UserData } from '@/models/UserData';
-import { UserStats } from '@/models/UserStats';
+import { DefaultUserStats, UserStats } from '@/models/UserStats';
 import { createClient } from '@/utils/supabase/client';
 
 export async function CreateUserData(
@@ -105,6 +105,10 @@ export async function GetUserStats(userId: string) {
         return {};
     }
 
+    if (!data || data.length === 0) {
+        return DefaultUserStats;
+    }
+
     let lastMatch = data[0];
     let goals = 0;
     let wins = 0;
@@ -148,7 +152,7 @@ export async function GetUserStats(userId: string) {
 
     return {
         id: userId,
-        updated_at: lastMatch.played_at,
+        updated_at: lastMatch.created_at,
         games_played: data.length,
         goals: goals,
         wins: wins,

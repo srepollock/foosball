@@ -1,20 +1,20 @@
-"use client";
+'use client';
 
-import { Team } from "@/models/TeamsData";
-import { fetchAllTeams } from "@/server/TeamFunctions";
-import { create } from "domain";
-import { useEffect, useState } from "react";
-import TeamSelectFormInput from "./TeamFormInput";
+import { TeamData } from '@/models/TeamsData';
+import { fetchAllTeams } from '@/server/TeamFunctions';
+import { create } from 'domain';
+import { useEffect, useState } from 'react';
+import TeamSelectFormInput from './TeamFormInput';
 
 type TournamentFormProps = {};
 
 enum TournamentType {
-    SINGLE_ELIMINATION = "Single Elimination",
-    DOUBLE_ELIMINATION = "Double Elimination",
+    SINGLE_ELIMINATION = 'Single Elimination',
+    DOUBLE_ELIMINATION = 'Double Elimination',
 }
 
 export default function NewTournamentForm() {
-    const [teams, setTeams] = useState<Team[]>([]);
+    const [teams, setTeams] = useState<TeamData[]>([]);
     const [teamSelectionInputs, setTeamSelectionInputs] = useState<
         HTMLInputElement[]
     >([]);
@@ -28,9 +28,9 @@ export default function NewTournamentForm() {
     };
 
     const handleAddTeam = () => {
-        const newTeamInput = document.createElement("input");
-        newTeamInput.type = "text";
-        newTeamInput.className = "border border-gray-300 p-2";
+        const newTeamInput = document.createElement('input');
+        newTeamInput.type = 'text';
+        newTeamInput.className = 'border border-gray-300 p-2';
         setTeamSelectionInputs(teamSelectionInputs.concat(newTeamInput));
     };
 
