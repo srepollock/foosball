@@ -22,7 +22,7 @@ export default async function TournamentDashboard() {
         <div className="flex-1 w-full flex flex-col gap-20 items-center">
             <PageHeader pageName="Tournaments" />
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3 w-full">
-                <ListOfTournaments />
+                <ListOfTournaments page={0} />
                 <NewTournamentForm />
             </div>
             <Footer />

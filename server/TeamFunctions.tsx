@@ -19,11 +19,11 @@ export async function CreateTeam(
     defenseId: string,
     teamName?: string
 ) {
-    if (!teamName) {
+    if (!teamName || teamName === '') {
         teamName = GenerateTeamName();
     }
     const supabase = createClient();
-    const { error } = await supabase.from('tournaments').insert({
+    const { error } = await supabase.from('teams').insert({
         forward: forwardId,
         defense: defenseId,
         team_name: teamName,
