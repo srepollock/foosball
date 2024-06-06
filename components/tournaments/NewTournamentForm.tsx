@@ -1,17 +1,18 @@
-'use client';
+"use client";
 
-import { TeamData } from '@/models/TeamsData';
-import { GetAllTeams } from '@/server/TeamFunctions';
-import { create } from 'domain';
-import { useEffect, useState } from 'react';
-import TeamSelectFormInput from './TeamFormInput';
-import { ProfanityCheck } from '@/utils/ProfanityCheck';
+import { TeamData } from "@/models/TeamsData";
+import { GetAllTeams, GetTeam } from "@/server/TeamFunctions";
+import { create } from "domain";
+import { useEffect, useState } from "react";
+import TeamSelectFormInput from "./TeamFormInput";
+import { ProfanityCheck } from "@/utils/ProfanityCheck";
+import { CreateTournament } from "@/server/TournamentFunctions";
 
 type TournamentFormProps = {};
 
 enum TournamentType {
-    SINGLE_ELIMINATION = 'Single Elimination',
-    DOUBLE_ELIMINATION = 'Double Elimination',
+    SINGLE_ELIMINATION = "Single Elimination",
+    DOUBLE_ELIMINATION = "Double Elimination",
 }
 
 export default function NewTournamentForm() {
@@ -29,12 +30,33 @@ export default function NewTournamentForm() {
             alert(message);
             return;
         }
+        var tournamentName = e?.target?.tournamentName.value as string;
+        var description = e?.target?.description.value as string;
+        var teams = teamSelectionInputs.map((item) => {
+            return item.value;
+        });
+        var teamsData: TeamData[] = [];
+        teams.forEach((team) => {
+            return GetTeam(team).then((teamData) => {
+                teamsData.push(teamData);
+            });
+        });
+        var randomizeBracket = e?.target?.randomizeBracket.checked as boolean;
+        var tournamentType = e?.target?.tournamentType.value as string;
+
+        CreateTournament(
+            tournamentName,
+            description,
+            teamsData,
+            tournamentType,
+            randomizeBracket
+        );
     };
 
     const handleAddTeam = () => {
-        const newTeamInput = document.createElement('input');
-        newTeamInput.type = 'text';
-        newTeamInput.className = 'border border-gray-300 p-2';
+        const newTeamInput = document.createElement("input");
+        newTeamInput.type = "text";
+        newTeamInput.className = "border border-gray-300 p-2";
         setTeamSelectionInputs(teamSelectionInputs.concat(newTeamInput));
     };
 
@@ -83,6 +105,8 @@ export default function NewTournamentForm() {
                         {TournamentType.DOUBLE_ELIMINATION}
                     </option>
                 </select>
+                <label className="text-lg">Randomize Bracket</label>
+                <input type="checkbox" name="randomizeBracket" defaultChecked />
                 <label className="text-lg">Teams</label>
                 {createTeamInputs(teamSelectionInputs)}
                 <button
