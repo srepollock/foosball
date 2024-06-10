@@ -1,21 +1,21 @@
-"use client";
+'use client';
 
-import { TeamData } from "@/models/TeamsData";
-import { GetAllTeams, GetTeam } from "@/server/TeamFunctions";
-import { create } from "domain";
-import { useEffect, useState } from "react";
-import TeamSelectFormInput from "./TeamFormInput";
-import { ProfanityCheck } from "@/utils/ProfanityCheck";
-import { CreateTournament } from "@/server/TournamentFunctions";
+import { TeamData } from '@/models/TeamsData';
+import { GetAllTeams, GetTeam } from '@/server/TeamFunctions';
+import { useEffect, useState } from 'react';
+import TeamSelectFormInput from './TeamSelectFormInput';
+import { ProfanityCheck } from '@/utils/ProfanityCheck';
+import { CreateTournament } from '@/server/TournamentFunctions';
 
 type TournamentFormProps = {};
 
 enum TournamentType {
-    SINGLE_ELIMINATION = "Single Elimination",
-    DOUBLE_ELIMINATION = "Double Elimination",
+    SINGLE_ELIMINATION = 'Single Elimination',
+    DOUBLE_ELIMINATION = 'Double Elimination',
 }
 
 export default function NewTournamentForm() {
+    const [loading, setLoading] = useState<boolean>(true);
     const [teams, setTeams] = useState<TeamData[]>([]);
     const [teamSelectionInputs, setTeamSelectionInputs] = useState<
         HTMLInputElement[]
@@ -54,9 +54,9 @@ export default function NewTournamentForm() {
     };
 
     const handleAddTeam = () => {
-        const newTeamInput = document.createElement("input");
-        newTeamInput.type = "text";
-        newTeamInput.className = "border border-gray-300 p-2";
+        const newTeamInput = document.createElement('input');
+        newTeamInput.type = 'text';
+        newTeamInput.className = 'border border-gray-300 p-2';
         setTeamSelectionInputs(teamSelectionInputs.concat(newTeamInput));
     };
 
@@ -71,8 +71,15 @@ export default function NewTournamentForm() {
     useEffect(() => {
         GetAllTeams().then((teams) => {
             setTeams(teams);
+            setLoading(true);
         });
     }, []);
+
+    useEffect(() => {
+        if (loading) {
+            setLoading(false);
+        }
+    }, [loading]);
 
     return (
         <div className="flex-1 flex flex-col gap-6 items-center">
@@ -110,13 +117,15 @@ export default function NewTournamentForm() {
                 <label className="text-lg">Teams</label>
                 {createTeamInputs(teamSelectionInputs)}
                 <button
-                    className="bg-blue-500 text-white p-2"
+                    className="bg-blue-500 text-white p-2 rounded-md"
                     onClick={handleAddTeam}
                 >
                     Add Team
                 </button>
-
-                <button className="bg-green-500 text-white p-2" type="submit">
+                <button
+                    className="bg-green-500 text-white p-2 rounded-md"
+                    type="submit"
+                >
                     Create
                 </button>
             </form>
