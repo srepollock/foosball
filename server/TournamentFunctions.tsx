@@ -1,11 +1,11 @@
-import { GenerateTeamName } from "@/utils/Helpers";
-import { createClient } from "@/utils/supabase/client";
-import { TeamData } from "@/models/TeamsData";
-import { GenerateTournamentBracket } from "@/utils/TournamentBracket";
+import { GenerateTeamName, GenerateTournamentName } from '@/utils/Helpers';
+import { createClient } from '@/utils/supabase/client';
+import { TeamData } from '@/models/TeamsData';
+import { GenerateTournamentBracket } from '@/utils/TournamentBracket';
 
 export async function GetAllTournaments() {
     const supabase = createClient();
-    const { data, error } = await supabase.from("tournament").select();
+    const { data, error } = await supabase.from('tournament').select();
     if (error) {
         console.error(error);
         return [];
@@ -16,9 +16,9 @@ export async function GetAllTournaments() {
 export async function GetTournamentById(id: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from("tournament")
+        .from('tournament')
         .select()
-        .eq("id", id)
+        .eq('id', id)
         .single();
     if (error) {
         console.error(error);
@@ -32,17 +32,20 @@ export async function CreateTournament(
     description: string,
     teams: TeamData[],
     tournamentType: string,
-    randomizeBracket: boolean = true,
+    randomizeBracket: boolean,
     initialBracket?: string
 ) {
     const supabase = createClient();
+    if (!name) {
+        name = GenerateTournamentName();
+    }
     if (!initialBracket) {
         initialBracket = GenerateTournamentBracket(teams, randomizeBracket);
     }
-    const { error } = await supabase.from("tournament").insert({
+    const { error } = await supabase.from('tournament').insert({
         name: name,
         description: description,
-        teams: teams.map((team) => team.id).join(","),
+        teams: teams.map((team) => team.id).join(','),
         bracket: initialBracket,
     });
     if (error) {
@@ -53,9 +56,9 @@ export async function CreateTournament(
 export async function GetTournamentBracket(tournamentId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from("tournament")
-        .select("bracket")
-        .eq("id", tournamentId)
+        .from('tournament')
+        .select('bracket')
+        .eq('id', tournamentId)
         .single();
     if (error) {
         console.error(error);
@@ -70,9 +73,9 @@ export async function UpdateTournamentBracket(
 ) {
     const supabase = createClient();
     const { error } = await supabase
-        .from("tournament")
+        .from('tournament')
         .update({ bracket: bracket })
-        .eq("id", tournamentId);
+        .eq('id', tournamentId);
     if (error) {
         console.error(error);
     }

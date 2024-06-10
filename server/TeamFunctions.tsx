@@ -1,4 +1,9 @@
-import { DefaultTeamStats, TeamStats } from '@/models/TeamsData';
+import {
+    CreateDefaultTeamData,
+    DefaultTeamStats,
+    TeamData,
+    TeamStats,
+} from '@/models/TeamsData';
 import { GenerateTeamName } from '@/utils/Helpers';
 import { createClient } from '@/utils/supabase/client';
 
@@ -34,7 +39,7 @@ export async function CreateTeam(
     }
 }
 
-export async function GetTeam(id: string) {
+export async function GetTeam(id: string): Promise<TeamData> {
     const supabase = createClient();
     const { data, error } = await supabase
         .from('teams')
@@ -43,9 +48,9 @@ export async function GetTeam(id: string) {
         .single();
     if (error) {
         console.error(error);
-        return {};
+        return CreateDefaultTeamData(id);
     }
-    return data;
+    return data as TeamData;
 }
 
 export async function GetTeamByPlayers(forward_id: string, defense_id: string) {

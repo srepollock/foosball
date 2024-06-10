@@ -17,8 +17,12 @@ export function GenerateTournamentBracket(
     let pairs: BracketPair[] = [];
     if (randomize) {
         let usedIndexes: any[] = [];
+        if (teams.length < 2) {
+            console.error('Cannot generate a bracket for less than 2 teams.');
+            return JSON.stringify([]);
+        }
         let i = 0;
-        while (usedIndexes.length <= teams.length) {
+        while (usedIndexes.length <= teams.length - 1 && i < 1000) {
             let homeIndex = Math.floor(Math.random() * teams.length);
             let awayIndex = Math.floor(Math.random() * teams.length);
             if (

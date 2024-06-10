@@ -6,6 +6,20 @@ export type TeamData = {
     team_name: string;
 };
 
+export const DefaultTeamData = {
+    id: '',
+    created_at: new Date().toISOString(),
+    forward_id: '',
+    defense_id: '',
+    team_name: '',
+};
+
+export function CreateDefaultTeamData(id: string) {
+    let teamData = DefaultTeamData;
+    teamData.id = id;
+    return teamData;
+}
+
 export type TeamStats = {
     goals: number;
     wins: number;

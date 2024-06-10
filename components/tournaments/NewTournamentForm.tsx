@@ -20,6 +20,7 @@ export default function NewTournamentForm() {
     const [teamSelectionInputs, setTeamSelectionInputs] = useState<
         HTMLInputElement[]
     >([]);
+    const [selection, setSelection] = useState<string[]>([]);
 
     const handleSubmit = async (e: any) => {
         e.preventDefault();
@@ -32,17 +33,17 @@ export default function NewTournamentForm() {
         }
         var tournamentName = e?.target?.tournamentName.value as string;
         var description = e?.target?.description.value as string;
-        var teams = teamSelectionInputs.map((item) => {
-            return item.value;
-        });
-        var teamsData: TeamData[] = [];
-        teams.forEach((team) => {
-            return GetTeam(team).then((teamData) => {
-                teamsData.push(teamData);
-            });
-        });
         var randomizeBracket = e?.target?.randomizeBracket.checked as boolean;
         var tournamentType = e?.target?.tournamentType.value as string;
+        var teams = teamSelectionInputs.map((item, index) => {
+            return selection[index];
+        });
+
+        let teamsData: TeamData[] = [];
+        for (let team of teams) {
+            let teamData = await GetTeam(team);
+            teamsData.push(teamData);
+        }
 
         CreateTournament(
             tournamentName,
@@ -58,15 +59,32 @@ export default function NewTournamentForm() {
         newTeamInput.type = 'text';
         newTeamInput.className = 'border border-gray-300 p-2';
         setTeamSelectionInputs(teamSelectionInputs.concat(newTeamInput));
+        setSelection(selection.concat(''));
+    };
+
+    const handleRemoveTeam = () => {
+        if (teamSelectionInputs.length > 0) {
+            let newInputs = teamSelectionInputs.slice(0, -1);
+            let newSelection = selection.slice(0, -1);
+            setTeamSelectionInputs(newInputs);
+            setSelection(newSelection);
+        }
     };
 
     const createTeamInputs = (teamSelectionInputs: HTMLInputElement[]) => {
         return teamSelectionInputs.map((item, index) => {
             return (
-                <TeamSelectFormInput key={index} index={index} teams={teams} />
+                <TeamSelectFormInput
+                    key={index}
+                    index={index}
+                    teams={teams}
+                    value={setSelection}
+                />
             );
         });
     };
+
+    let teamInputs: any = createTeamInputs(teamSelectionInputs);
 
     useEffect(() => {
         GetAllTeams().then((teams) => {
@@ -115,12 +133,20 @@ export default function NewTournamentForm() {
                 <label className="text-lg">Randomize Bracket</label>
                 <input type="checkbox" name="randomizeBracket" defaultChecked />
                 <label className="text-lg">Teams</label>
-                {createTeamInputs(teamSelectionInputs)}
+                {!loading && teamInputs}
                 <button
+                    type="button"
                     className="bg-blue-500 text-white p-2 rounded-md"
                     onClick={handleAddTeam}
                 >
                     Add Team
+                </button>
+                <button
+                    type="button"
+                    className="bg-red-500 text-white p-2 rounded-md"
+                    onClick={handleRemoveTeam}
+                >
+                    Remove Team
                 </button>
                 <button
                     className="bg-green-500 text-white p-2 rounded-md"
