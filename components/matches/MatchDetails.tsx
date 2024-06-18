@@ -98,7 +98,7 @@ export default function MatchDetails(props: MatchDetailsProps) {
                                     {match.score_home} - {match.score_away}
                                 </td>
                                 <td className="border px-8 py-4">
-                                    <a href={`/user/${match.home_forward}`}>
+                                    <a href={`/player/${match.home_forward}`}>
                                         {
                                             players.find((player) => {
                                                 return match.home_forward.includes(
@@ -112,7 +112,7 @@ export default function MatchDetails(props: MatchDetailsProps) {
                                     {match.home_forward_goals}
                                 </td>
                                 <td className="border px-8 py-4">
-                                    <a href={`/user/${match.home_defense}`}>
+                                    <a href={`/player/${match.home_defense}`}>
                                         {
                                             players.find((player) => {
                                                 if (
@@ -133,7 +133,7 @@ export default function MatchDetails(props: MatchDetailsProps) {
                                     {match.home_defense_goals}
                                 </td>
                                 <td className="border px-8 py-4">
-                                    <a href={`/user/${match.away_forward}`}>
+                                    <a href={`/player/${match.away_forward}`}>
                                         {
                                             players.find((player) => {
                                                 return match.away_forward.includes(
@@ -147,7 +147,7 @@ export default function MatchDetails(props: MatchDetailsProps) {
                                     {match.away_forward_goals}
                                 </td>
                                 <td className="border px-8 py-4">
-                                    <a href={`/user/${match.away_defense}`}>
+                                    <a href={`/player/${match.away_defense}`}>
                                         {
                                             players.find((player) => {
                                                 if (
