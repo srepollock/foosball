@@ -1,15 +1,15 @@
-import { createClient } from '@/utils/supabase/client';
-import { MatchData, Team } from '@/models/MatchData';
-import { match } from 'assert';
-import { GetTeamByPlayers } from './TeamFunctions';
-import { UpdateTournamentGame } from './TournamentFunctions';
+import { createClient } from "@/utils/supabase/client";
+import { MatchData, Team } from "@/models/MatchData";
+import { match } from "assert";
+import { GetTeamByPlayers } from "./TeamFunctions";
+import { UpdateTournamentGame } from "./TournamentFunctions";
 
 export async function fetchMatches(page: number, userId?: string) {
     const supabase = createClient();
     const PAGE_SIZE = 9;
     if (!userId) {
         const { data, error } = await supabase
-            .from('matches')
+            .from("matches")
             .select()
             .range(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
         if (error) {
@@ -18,8 +18,8 @@ export async function fetchMatches(page: number, userId?: string) {
         return data;
     } else {
         const { data, error } = await supabase
-            .from('matches')
-            .select('*')
+            .from("matches")
+            .select("*")
             .or(
                 `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
             )
@@ -34,9 +34,9 @@ export async function fetchMatches(page: number, userId?: string) {
 export async function fetchMatch(matchId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('matches')
+        .from("matches")
         .select()
-        .eq('id', matchId)
+        .eq("id", matchId)
         .single();
     if (error) {
         console.error(error);
@@ -47,15 +47,15 @@ export async function fetchMatch(matchId: string) {
 export async function calculateTotalMatches(userId?: string) {
     const supabase = createClient();
     if (!userId) {
-        const { data, error } = await supabase.from('matches').select('id');
+        const { data, error } = await supabase.from("matches").select("id");
         if (error) {
             console.error(error);
         }
         return data?.length;
     } else {
         const { data, error } = await supabase
-            .from('matches')
-            .select('')
+            .from("matches")
+            .select("")
             .or(
                 `home_forward.eq.${userId}, home_defense.eq.${userId}, away_forward.eq.${userId}, away_defense.eq.${userId}`
             );
@@ -85,7 +85,7 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
             matchData.away_forward,
             matchData.away_defense
         );
-        const { data, error } = await supabase.from('matches').insert([
+        const { data, error } = await supabase.from("matches").insert([
             {
                 created_at: matchData.created_at,
                 played_at: matchData.played_at,
@@ -106,14 +106,14 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
         ]);
 
         if (error) {
-            console.error('Error adding match:', error.message);
+            console.error("Error adding match:", error.message);
         } else {
-            console.log('Match added successfully:', data);
+            console.log("Match added successfully:", data);
             // Add any further logic here, such as resetting form fields
         }
     } else if (matchData.home_forward && matchData.away_forward) {
         const { data, error } = await supabase
-            .from('matches')
+            .from("matches")
             .insert([
                 {
                     created_at: matchData.created_at,
@@ -129,26 +129,28 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
             ])
             .select();
         if (error) {
-            console.error('Error adding match:', error.message);
+            console.error("Error adding match:", error.message);
         } else {
-            console.log('Match added successfully');
+            console.log("Match added successfully");
             // Add any further logic here, such as resetting form fields
         }
         console.log(`Data: ${JSON.stringify(data)}`);
         return data;
     } else {
-        console.error('Please fill in all fields');
+        console.error("Please fill in all fields");
     }
 }
 
 export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
     const supabase = createClient();
-    if (matchData.home_forward
-        && matchData.home_defense
-        && matchData.away_forward
-        && matchData.away_defense
-        && matchData.tournament_id
-        && matchData.tournament_round_id) {
+    if (
+        matchData.home_forward &&
+        matchData.home_defense &&
+        matchData.away_forward &&
+        matchData.away_defense &&
+        matchData.tournament_id &&
+        matchData.tournament_round_id
+    ) {
         let home_team = await GetTeamByPlayers(
             matchData.home_forward,
             matchData.home_defense
@@ -157,7 +159,7 @@ export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
             matchData.away_forward,
             matchData.away_defense
         );
-        const { data, error } = await supabase.from('matches').insert([
+        const { data, error } = await supabase.from("matches").insert([
             {
                 created_at: matchData.created_at,
                 played_at: matchData.played_at,
@@ -177,16 +179,20 @@ export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
                 tournament_id: matchData.tournament_id,
             },
         ]);
-
-        UpdateTournamentGame(matchData!.tournament_id, matchData.id!, matchData.tournament_round_id);
+        // TODO: this navigates away from the page and does not execute if the insert is successful
+        UpdateTournamentGame(
+            matchData!.tournament_id,
+            matchData.id!,
+            matchData.tournament_round_id
+        );
 
         if (error) {
-            console.error('Error adding match:', error.message);
+            console.error("Error adding match:", error.message);
         } else {
-            console.log('Match added successfully:', data);
+            console.log("Match added successfully:", data);
             // Add any further logic here, such as resetting form fields
         }
     } else {
-        console.error('Please fill in all fields');
+        console.error("Please fill in all fields");
     }
 }
