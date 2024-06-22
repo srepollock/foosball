@@ -46,7 +46,7 @@ export default function NewTeamForm() {
         setDefender(players[0]?.id);
     }, []);
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col">
             <form
                 className="flex-1 flex flex-col gap-6"
                 onSubmit={handleSubmit}
@@ -55,12 +55,12 @@ export default function NewTeamForm() {
                 <input
                     name="teamName"
                     type="text"
-                    className="border border-gray-300 p-2 text-black"
+                    className="input w-full max-w-xs mb-4"
                 />
                 <label className="text-lg">Forward</label>
                 <select
                     name="forward"
-                    className="border border-gray-300 p-2 text-black"
+                    className="select w-full max-w-xs mb-4"
                     onChange={handleForwardChanged}
                 >
                     {players.map((player) => (
@@ -72,7 +72,7 @@ export default function NewTeamForm() {
                 <label className="text-lg">Defender</label>
                 <select
                     name="defender"
-                    className="border border-gray-300 p-2 text-black"
+                    className="select w-full max-w-xs mb-4"
                     onChange={handleDefenseChanged}
                 >
                     {players.map((player) => (
@@ -81,7 +81,7 @@ export default function NewTeamForm() {
                         </option>
                     ))}
                 </select>
-                <button className="bg-green-500 text-white p-2" type="submit">
+                <button className="btn bg-green-500 text-white p-2" type="submit">
                     Create
                 </button>
             </form>

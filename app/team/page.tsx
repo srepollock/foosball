@@ -5,6 +5,7 @@ import TeamDetails from '@/components/teams/TeamDetails';
 import ListOfTeams from '@/components/teams/ListOfTeams';
 import { createClient } from '@/utils/supabase/server';
 import { redirect } from 'next/navigation';
+import AddTeamMatchForm from '@/components/matches/AddTeamManchForm';
 
 export default async function TeamPage() {
     const supabase = createClient();
@@ -21,7 +22,14 @@ export default async function TeamPage() {
             <PageHeader pageName="Teams" />
             <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
                 <ListOfTeams page={0} />
+            </div>
+            <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
+                <h2 className="font-bold text-4xl mb-4">Create a New Team</h2>
                 <NewTeamForm />
+            </div>
+            <div className="animate-in flex-1 flex flex-col gap-20 opacity-0 max-w-4xl px-3">
+                <h2 className="font-bold text-4xl mb-4">Add a Team Match</h2>
+                <AddTeamMatchForm />
             </div>
             <Footer />
         </div>

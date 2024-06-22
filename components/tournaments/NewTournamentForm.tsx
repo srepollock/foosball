@@ -110,17 +110,17 @@ export default function NewTournamentForm() {
                 <input
                     type="text"
                     name="tournamentName"
-                    className="border border-gray-300 p-2 text-black"
+                    className="input w-full max-w-xs mb-4"
                 />
                 <label className="text-lg">Description</label>
                 <input
                     type="text"
                     name="description"
-                    className="border border-gray-300 p-2 text-black"
+                    className="input w-full max-w-xs mb-4"
                 />
                 <label className="text-lg">Tournament Type</label>
                 <select
-                    className="border border-gray-300 p-2 text-black"
+                    className="select w-full max-w-xs mb-4"
                     name="tournamentType"
                 >
                     <option value={TournamentType.SINGLE_ELIMINATION}>

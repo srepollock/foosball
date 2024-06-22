@@ -2,6 +2,7 @@ import { createClient } from '@/utils/supabase/client';
 import { MatchData, Team } from '@/models/MatchData';
 import { match } from 'assert';
 import { GetTeamByPlayers } from './TeamFunctions';
+import { UpdateTournamentGame } from './TournamentFunctions';
 
 export async function fetchMatches(page: number, userId?: string) {
     const supabase = createClient();
@@ -67,6 +68,9 @@ export async function calculateTotalMatches(userId?: string) {
 
 export async function handleAddMatch(e: any, matchData: MatchData) {
     const supabase = createClient();
+    if (matchData.tournament_id) {
+        handleAddTournamentMatch(e, matchData);
+    }
     if (
         matchData.home_forward &&
         matchData.home_defense &&
@@ -132,6 +136,56 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
         }
         console.log(`Data: ${JSON.stringify(data)}`);
         return data;
+    } else {
+        console.error('Please fill in all fields');
+    }
+}
+
+export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
+    const supabase = createClient();
+    if (matchData.home_forward
+        && matchData.home_defense
+        && matchData.away_forward
+        && matchData.away_defense
+        && matchData.tournament_id
+        && matchData.tournament_round_id) {
+        let home_team = await GetTeamByPlayers(
+            matchData.home_forward,
+            matchData.home_defense
+        );
+        let away_team = await GetTeamByPlayers(
+            matchData.away_forward,
+            matchData.away_defense
+        );
+        const { data, error } = await supabase.from('matches').insert([
+            {
+                created_at: matchData.created_at,
+                played_at: matchData.played_at,
+                home_forward: matchData.home_forward,
+                home_forward_goals: matchData.home_forward_goals ?? 0,
+                away_forward: matchData.away_forward,
+                away_forward_goals: matchData.away_forward_goals ?? 0,
+                home_defense: matchData.home_defense,
+                home_defense_goals: matchData.home_defense_goals ?? 0,
+                away_defense: matchData.away_defense,
+                away_defense_goals: matchData.away_defense_goals ?? 0,
+                score_home: matchData.score_home,
+                score_away: matchData.score_away,
+                winner: matchData.winner,
+                home_team_id: home_team.id ?? null,
+                away_team_id: away_team.id ?? null,
+                tournament_id: matchData.tournament_id,
+            },
+        ]);
+
+        UpdateTournamentGame(matchData!.tournament_id, matchData.id!, matchData.tournament_round_id);
+
+        if (error) {
+            console.error('Error adding match:', error.message);
+        } else {
+            console.log('Match added successfully:', data);
+            // Add any further logic here, such as resetting form fields
+        }
     } else {
         console.error('Please fill in all fields');
     }

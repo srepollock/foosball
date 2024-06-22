@@ -6,7 +6,10 @@ export type TournamentBracketObject = {
 
 export type TournamentBracketMatchupObject = {
     match_id: string;
-    game_number: number;
+    round: number;
+    order: number;
     home_team_id: string;
     away_team_id: string;
+    parent?: TournamentBracketMatchupObject;
+    child?: TournamentBracketMatchupObject[];
 };

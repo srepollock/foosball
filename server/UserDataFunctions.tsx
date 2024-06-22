@@ -48,7 +48,7 @@ export async function GetAllUsersData() {
     return data;
 }
 
-export async function GetUserIdFullNameData(userId: string) {
+export async function GetUserIdFullNameData(userId: string): Promise<{id: string, full_name: string}> {
     const supabase = createClient();
     const { data, error } = await supabase
         .from('user-data')
@@ -58,7 +58,7 @@ export async function GetUserIdFullNameData(userId: string) {
 
     if (error) {
         console.error(error);
-        return {};
+        return {id: '', full_name: ''};
     }
 
     return data;

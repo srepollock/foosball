@@ -2,6 +2,10 @@ import { GenerateTeamName, GenerateTournamentName } from '@/utils/Helpers';
 import { createClient } from '@/utils/supabase/client';
 import { TeamData } from '@/models/TeamsData';
 import { GenerateTournamentBracket } from '@/utils/TournamentBracket';
+import { BracketData } from '@/models/BracketData';
+import { GetTeam } from './TeamFunctions';
+import { GetUserIdFullNameData } from './UserDataFunctions';
+import { fetchMatch } from './MatchFunctions';
 
 export async function GetAllTournaments() {
     const supabase = createClient();
@@ -79,4 +83,108 @@ export async function UpdateTournamentBracket(
     if (error) {
         console.error(error);
     }
+}
+
+export async function UpdateTournamentGame(tournamentId: string, matchId: string, gameNumber: number) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from('tournament')
+        .select('bracket')
+        .eq('id', tournamentId)
+        .single();
+    if (error) {
+        console.error(error);
+        return {};
+    }
+    let bracketData = JSON.parse(data.bracket);
+    for (let i = 0; i < bracketData.length; i++) {
+        if (bracketData[i].game_number == gameNumber) {
+            bracketData[i].match_id = matchId;
+        }
+    }
+    await UpdateTournamentBracket(tournamentId, JSON.stringify(bracketData));
+}
+
+export async function GetTournamentForBracketry(tournamentId: string) {
+    const supabase = createClient();
+    const { data, error } = await supabase
+        .from('tournament')
+        .select('name, bracket, teams')
+        .eq('id', tournamentId)
+        .single();
+    if (error) {
+        console.error(error);
+        return {};
+    }
+    
+    let bracketryData: BracketData = {
+        rounds: [],
+        matches: [],
+        contestants: {}
+    };
+
+    let tournamentData = data;
+    let bracketData = JSON.parse(tournamentData.bracket);
+    let teams: any = {};
+    let teamIds = tournamentData.teams.split(',');
+    for (let i = 0; i < teamIds.length; i++) {
+        teams[teamIds[i]] = await GetTeam(teamIds[i]);
+    }
+    let rounds = tournamentData.teams.split(',').length - 1;
+
+    for (let i = 0; i < rounds; i++) {
+        bracketryData.rounds!.push({
+            name: 'Round ' + i,
+        });
+    }
+
+    for (let i = 0; i < bracketData.length; i++) {
+        let matchup = bracketData[i];
+        let matchData = await fetchMatch(matchup.match_id);
+        let homeTeam = await GetTeam(matchData.home_team_id);
+        let awayTeam = await GetTeam(matchData.away_team_id);
+        bracketryData.matches!.push({
+            roundIndex: matchup.round,
+            order: matchup.order,
+            sides: [
+                {
+                    title: homeTeam.team_name,
+                    contestantId: homeTeam.id,
+                    scores: [
+                        {
+                            mainScore: matchData.score_home,
+                            isWinner: matchData.winner == 'HOME'
+                        }
+                    ]
+                },
+                {
+                    title: awayTeam.team_name,
+                    contestantId: awayTeam.id,
+                    scores: [
+                        {
+                            mainScore: matchData.score_away,
+                            isWinner: matchData.winner == 'AWAY'
+                        }
+                    ]
+                }
+            ]
+        });
+    }
+
+    for (let i = 0; i < teamIds.length; i++) {
+        let players = [];
+        let forward = await GetUserIdFullNameData(teams[teamIds[i]].forward_id);
+        let defense = await GetUserIdFullNameData(teams[teamIds[i]].defense_id);
+        players.push({
+            title: forward.full_name
+        });
+        players.push({
+            title: defense.full_name
+        });
+        bracketryData.contestants![teamIds[i]] = {
+            players: players
+        };
+    }
+
+    return bracketryData;
 }

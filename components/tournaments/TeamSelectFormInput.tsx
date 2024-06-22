@@ -19,7 +19,7 @@ export default function TeamSelectFormInput(props: TeamSelectFormInputProps) {
     };
     return (
         <select
-            className="border border-gray-300 p-2 text-black"
+            className="select w-full max-w-xs mb-4"
             name={`tournamentTeam${props.index}`}
             onChange={(e) => handleSelection(e, props.index)}
         >

@@ -11,7 +11,11 @@ type PlayerData = {
     full_name: any;
 };
 
-export default function AddTournamentMatchForm() {
+type AddTournamentMatchFormProps = {
+    id?: string;
+}
+
+export default function AddTournamentMatchForm(props: AddTournamentMatchFormProps) {
     const [playedAt, setPlayedAt] = useState(new Date());
 
     const [players, setPlayers] = useState<PlayerData[]>([]);
@@ -32,6 +36,8 @@ export default function AddTournamentMatchForm() {
     const [awayDefendersScore, setAwayDefendersScore] = useState<
         number | undefined
     >(undefined);
+    const [tournamentId, setTournamentId] = useState('');
+    const [tournamentRoundId, setTournamentRoundId] = useState(0);
 
     useEffect(() => {
         GetAllUserIdFullNamesData().then((data) => {
@@ -44,7 +50,7 @@ export default function AddTournamentMatchForm() {
             <form>
                 <div className="mb-4">
                     <input
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="input w-full max-w-xs mb-4"
                         type="datetime-local"
                         id="played_at"
                         defaultValue={new Date().toISOString().substring(0, 16)}
@@ -54,7 +60,7 @@ export default function AddTournamentMatchForm() {
                 </div>
                 <div className="mb-8">
                     <select
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="select w-full max-w-xs mb-4"
                         name="homeForwardsPlayer"
                         id="homeForwardsPlayer"
                         onChange={(e) => setHomeForwardsPlayer(e.target.value)}
@@ -68,7 +74,7 @@ export default function AddTournamentMatchForm() {
                         ))}
                     </select>
                     <input
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="input w-full max-w-xs mb-4"
                         type="number"
                         value={homeForwardsScore}
                         onChange={(e) =>
@@ -79,7 +85,7 @@ export default function AddTournamentMatchForm() {
                     />
                     <br />
                     <select
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="select w-full max-w-xs mb-4"
                         name="homeDefendersPlayer"
                         id="homeDefendersPlayer"
                         onChange={(e) => setHomeDefendersPlayer(e.target.value)}
@@ -92,7 +98,7 @@ export default function AddTournamentMatchForm() {
                         ))}
                     </select>
                     <input
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="input w-full max-w-xs mb-4"
                         type="number"
                         value={homeDefendersScore ?? 0}
                         onChange={(e) =>
@@ -103,7 +109,7 @@ export default function AddTournamentMatchForm() {
                 </div>
                 <div className="mb-8">
                     <select
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="select w-full max-w-xs mb-4"
                         name="awayForwardsPlayer"
                         id="awayForwardsPlayer"
                         onChange={(e) => setAwayForwardsPlayer(e.target.value)}
@@ -117,7 +123,7 @@ export default function AddTournamentMatchForm() {
                         ))}
                     </select>
                     <input
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="input w-full max-w-xs mb-4"
                         type="number"
                         value={awayForwardsScore}
                         onChange={(e) =>
@@ -128,7 +134,7 @@ export default function AddTournamentMatchForm() {
                     />
                     <br />
                     <select
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="select w-full max-w-xs mb-4"
                         name="awayDefendersPlayer"
                         id="awayDefendersPlayer"
                         onChange={(e) => setAwayDefendersPlayer(e.target.value)}
@@ -141,7 +147,7 @@ export default function AddTournamentMatchForm() {
                         ))}
                     </select>
                     <input
-                        className="border-2 border-gray-500 bg-gray-500 h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none m-2"
+                        className="input w-full max-w-xs mb-4"
                         type="number"
                         value={awayDefendersScore ?? 0}
                         onChange={(e) =>
@@ -149,6 +155,25 @@ export default function AddTournamentMatchForm() {
                         }
                         placeholder="Away Defender Score"
                     />
+                </div>
+                <div className="mb-8">
+                    <label className="text-sm text-gray-500">Tournament ID</label>
+                    <br />
+                    <input id="tournamentId"
+                        className="input w-full max-w-xs mb-4"
+                        defaultValue={props.id ? props.id : ''}
+                        type="text" placeholder="Tournament ID" onChange={(e) => {
+                        setTournamentId(e.target.value)
+                    }}/>
+                </div>
+                <div className="mb-8">
+                    <label className="text-sm text-gray-500">Tournament Round ID</label>
+                    <br />
+                    <input id="tournamentRoundId"
+                        className="input w-full max-w-xs mb-4"
+                        type="number" placeholder="Tournament Round ID" onChange={(e) => {
+                        setTournamentRoundId(Number(e.target.value))
+                    }} />
                 </div>
                 <AddMatchButton
                     onClick={(e: any) => {
@@ -188,6 +213,8 @@ export default function AddTournamentMatchForm() {
                             score_away: awayScore,
                             winner:
                                 homeScore > awayScore ? Team.HOME : Team.AWAY,
+                            tournament_id: tournamentId,
+                            tournament_round_id: tournamentRoundId,
                         } as MatchData);
                     }}
                 />
