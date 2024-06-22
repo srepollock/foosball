@@ -1,15 +1,15 @@
-import { GenerateTeamName, GenerateTournamentName } from '@/utils/Helpers';
-import { createClient } from '@/utils/supabase/client';
-import { TeamData } from '@/models/TeamsData';
-import { GenerateTournamentBracket } from '@/utils/TournamentBracket';
-import { BracketData } from '@/models/BracketData';
-import { GetTeam } from './TeamFunctions';
-import { GetUserIdFullNameData } from './UserDataFunctions';
-import { fetchMatch } from './MatchFunctions';
+import { GenerateTeamName, GenerateTournamentName } from "@/utils/Helpers";
+import { createClient } from "@/utils/supabase/client";
+import { TeamData } from "@/models/TeamsData";
+import { GenerateTournamentBracket } from "@/utils/TournamentBracket";
+import { BracketData } from "@/models/BracketData";
+import { GetTeam } from "./TeamFunctions";
+import { GetUserIdFullNameData } from "./UserDataFunctions";
+import { fetchMatch } from "./MatchFunctions";
 
 export async function GetAllTournaments() {
     const supabase = createClient();
-    const { data, error } = await supabase.from('tournament').select();
+    const { data, error } = await supabase.from("tournament").select();
     if (error) {
         console.error(error);
         return [];
@@ -20,9 +20,9 @@ export async function GetAllTournaments() {
 export async function GetTournamentById(id: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('tournament')
+        .from("tournament")
         .select()
-        .eq('id', id)
+        .eq("id", id)
         .single();
     if (error) {
         console.error(error);
@@ -46,11 +46,12 @@ export async function CreateTournament(
     if (!initialBracket) {
         initialBracket = GenerateTournamentBracket(teams, randomizeBracket);
     }
-    const { error } = await supabase.from('tournament').insert({
+    const { error } = await supabase.from("tournament").insert({
         name: name,
         description: description,
-        teams: teams.map((team) => team.id).join(','),
+        teams: teams.map((team) => team.id).join(","),
         bracket: initialBracket,
+        tournament_type: tournamentType,
     });
     if (error) {
         console.error(error);
@@ -60,9 +61,9 @@ export async function CreateTournament(
 export async function GetTournamentBracket(tournamentId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('tournament')
-        .select('bracket')
-        .eq('id', tournamentId)
+        .from("tournament")
+        .select("bracket")
+        .eq("id", tournamentId)
         .single();
     if (error) {
         console.error(error);
@@ -77,20 +78,24 @@ export async function UpdateTournamentBracket(
 ) {
     const supabase = createClient();
     const { error } = await supabase
-        .from('tournament')
+        .from("tournament")
         .update({ bracket: bracket })
-        .eq('id', tournamentId);
+        .eq("id", tournamentId);
     if (error) {
         console.error(error);
     }
 }
 
-export async function UpdateTournamentGame(tournamentId: string, matchId: string, gameNumber: number) {
+export async function UpdateTournamentGame(
+    tournamentId: string,
+    matchId: string,
+    gameNumber: number
+) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('tournament')
-        .select('bracket')
-        .eq('id', tournamentId)
+        .from("tournament")
+        .select("bracket")
+        .eq("id", tournamentId)
         .single();
     if (error) {
         console.error(error);
@@ -108,33 +113,33 @@ export async function UpdateTournamentGame(tournamentId: string, matchId: string
 export async function GetTournamentForBracketry(tournamentId: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('tournament')
-        .select('name, bracket, teams')
-        .eq('id', tournamentId)
+        .from("tournament")
+        .select("name, bracket, teams")
+        .eq("id", tournamentId)
         .single();
     if (error) {
         console.error(error);
         return {};
     }
-    
+
     let bracketryData: BracketData = {
         rounds: [],
         matches: [],
-        contestants: {}
+        contestants: {},
     };
 
     let tournamentData = data;
     let bracketData = JSON.parse(tournamentData.bracket);
     let teams: any = {};
-    let teamIds = tournamentData.teams.split(',');
+    let teamIds = tournamentData.teams.split(",");
     for (let i = 0; i < teamIds.length; i++) {
         teams[teamIds[i]] = await GetTeam(teamIds[i]);
     }
-    let rounds = tournamentData.teams.split(',').length - 1;
+    let rounds = tournamentData.teams.split(",").length - 1;
 
     for (let i = 0; i < rounds; i++) {
         bracketryData.rounds!.push({
-            name: 'Round ' + i,
+            name: "Round " + i,
         });
     }
 
@@ -153,9 +158,9 @@ export async function GetTournamentForBracketry(tournamentId: string) {
                     scores: [
                         {
                             mainScore: matchData.score_home,
-                            isWinner: matchData.winner == 'HOME'
-                        }
-                    ]
+                            isWinner: matchData.winner == "HOME",
+                        },
+                    ],
                 },
                 {
                     title: awayTeam.team_name,
@@ -163,11 +168,11 @@ export async function GetTournamentForBracketry(tournamentId: string) {
                     scores: [
                         {
                             mainScore: matchData.score_away,
-                            isWinner: matchData.winner == 'AWAY'
-                        }
-                    ]
-                }
-            ]
+                            isWinner: matchData.winner == "AWAY",
+                        },
+                    ],
+                },
+            ],
         });
     }
 
@@ -176,13 +181,13 @@ export async function GetTournamentForBracketry(tournamentId: string) {
         let forward = await GetUserIdFullNameData(teams[teamIds[i]].forward_id);
         let defense = await GetUserIdFullNameData(teams[teamIds[i]].defense_id);
         players.push({
-            title: forward.full_name
+            title: forward.full_name,
         });
         players.push({
-            title: defense.full_name
+            title: defense.full_name,
         });
         bracketryData.contestants![teamIds[i]] = {
-            players: players
+            players: players,
         };
     }
 

@@ -1,6 +1,5 @@
-import { TeamData } from '@/models/TeamsData';
-import { createClient } from './supabase/server';
-
+import { TeamData } from "@/models/TeamsData";
+import { createClient } from "./supabase/server";
 
 type BracketPair = {
     home: TeamData;
@@ -13,14 +12,14 @@ export function GenerateTournamentBracket(
 ) {
     if (teams.length % 2 != 0) {
         console.error(
-            'Cannot generate a bracket for an un-even number of teams.'
+            "Cannot generate a bracket for an un-even number of teams."
         );
     }
     let pairs: BracketPair[] = [];
     if (randomize) {
         let usedIndexes: any[] = [];
         if (teams.length < 2) {
-            console.error('Cannot generate a bracket for less than 2 teams.');
+            console.error("Cannot generate a bracket for less than 2 teams.");
             return JSON.stringify([]);
         }
         let i = 0;
@@ -56,22 +55,25 @@ export function GenerateTournamentBracket(
 
     for (let i = 0; i < rounds; i++) {
         for (let k = 0; k < pairs.length; k++) {
-            if (order >= (pairs.length / (rounds + 1))) {
+            if (order >= pairs.length / (rounds + 1)) {
                 order = 0;
             }
             if (i < pairs.length) {
                 bracket.push({
                     match_id: i.toString(),
-                    game_number: i,
+                    round: i,
+                    order: order,
                     home_team_id: pairs[i].home.id,
                     away_team_id: pairs[i].away.id,
                 });
             } else {
                 bracket.push({
                     match_id: i.toString(),
+                    round: i,
+                    order: order,
                     game_number: i,
-                    home_team_id: '',
-                    away_team_id: '',
+                    home_team_id: "",
+                    away_team_id: "",
                 });
             }
             order++;

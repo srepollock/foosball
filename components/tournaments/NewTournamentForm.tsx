@@ -1,20 +1,23 @@
-'use client';
+"use client";
 
-import { TeamData } from '@/models/TeamsData';
-import { GetAllTeams, GetTeam } from '@/server/TeamFunctions';
-import { useEffect, useState } from 'react';
-import TeamSelectFormInput from './TeamSelectFormInput';
-import { ProfanityCheck } from '@/utils/ProfanityCheck';
-import { CreateTournament } from '@/server/TournamentFunctions';
+import { TeamData } from "@/models/TeamsData";
+import { GetAllTeams, GetTeam } from "@/server/TeamFunctions";
+import { useEffect, useState } from "react";
+import TeamSelectFormInput from "./TeamSelectFormInput";
+import { ProfanityCheck } from "@/utils/ProfanityCheck";
+import { CreateTournament } from "@/server/TournamentFunctions";
+import { useRouter } from "next/navigation";
 
 type TournamentFormProps = {};
 
 enum TournamentType {
-    SINGLE_ELIMINATION = 'Single Elimination',
-    DOUBLE_ELIMINATION = 'Double Elimination',
+    SINGLE_ELIMINATION = "Single Elimination",
+    DOUBLE_ELIMINATION = "Double Elimination",
 }
 
 export default function NewTournamentForm() {
+    const router = useRouter();
+
     const [loading, setLoading] = useState<boolean>(true);
     const [teams, setTeams] = useState<TeamData[]>([]);
     const [teamSelectionInputs, setTeamSelectionInputs] = useState<
@@ -52,14 +55,15 @@ export default function NewTournamentForm() {
             tournamentType,
             randomizeBracket
         );
+        return router.push("/tournament");
     };
 
     const handleAddTeam = () => {
-        const newTeamInput = document.createElement('input');
-        newTeamInput.type = 'text';
-        newTeamInput.className = 'border border-gray-300 p-2';
+        const newTeamInput = document.createElement("input");
+        newTeamInput.type = "text";
+        newTeamInput.className = "border border-gray-300 p-2";
         setTeamSelectionInputs(teamSelectionInputs.concat(newTeamInput));
-        setSelection(selection.concat(''));
+        setSelection(selection.concat(""));
     };
 
     const handleRemoveTeam = () => {
