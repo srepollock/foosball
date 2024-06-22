@@ -1,10 +1,11 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import AddMatchButton from './AddMatchButton';
-import { handleAddMatch } from '@/server/MatchFunctions';
-import { MatchData, Team } from '@/models/MatchData';
-import { GetAllUserIdFullNamesData } from '@/server/UserDataFunctions';
+import { useState, useEffect } from "react";
+import AddMatchButton from "./AddMatchButton";
+import { handleAddMatch } from "@/server/MatchFunctions";
+import { MatchData, Team } from "@/models/MatchData";
+import { GetAllUserIdFullNamesData } from "@/server/UserDataFunctions";
+import { useRouter } from "next/navigation";
 
 type PlayerData = {
     id: any;
@@ -12,15 +13,16 @@ type PlayerData = {
 };
 
 export default function AddMatchForm() {
+    const router = useRouter();
     const [playedAt, setPlayedAt] = useState(new Date());
 
     const [players, setPlayers] = useState<PlayerData[]>([]);
 
-    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState('');
+    const [homeForwardsPlayer, setHomeForwardsPlayer] = useState("");
     const [homeDefendersPlayer, setHomeDefendersPlayer] = useState<
         String | undefined
     >(undefined);
-    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState('');
+    const [awayForwardsPlayer, setAwayForwardsPlayer] = useState("");
     const [awayDefendersPlayer, setAwayDefendersPlayer] = useState<
         String | undefined
     >(undefined);
@@ -32,7 +34,7 @@ export default function AddMatchForm() {
     const [awayDefendersScore, setAwayDefendersScore] = useState<
         number | undefined
     >(undefined);
-    const [tournamentId, setTournamentId] = useState('');
+    const [tournamentId, setTournamentId] = useState("");
     const [tournamentRoundId, setTournamentRoundId] = useState(0);
 
     useEffect(() => {
@@ -157,23 +159,32 @@ export default function AddMatchForm() {
                 <div className="mb-8">
                     <label className="text-sm">Tournament ID</label>
                     <br />
-                    <input id="tournamentId" 
+                    <input
+                        id="tournamentId"
                         className="input w-full ma-x-xs mb-4"
-                        type="text" placeholder="Tournament ID" onChange={(e) => {
-                        setTournamentId(e.target.value)
-                    }}/>
+                        type="text"
+                        placeholder="Tournament ID"
+                        onChange={(e) => {
+                            setTournamentId(e.target.value);
+                        }}
+                    />
                 </div>
                 <div className="mb-8">
                     <label className="text-sm">Tournament Round ID</label>
                     <br />
-                    <input id="tournamentRoundId" 
+                    <input
+                        id="tournamentRoundId"
                         className="input w-full ma-x-xs mb-4"
-                        type="number" placeholder="Tournament Round ID" onChange={(e) => {
-                        setTournamentRoundId(Number(e.target.value))
-                    }} />
+                        type="number"
+                        placeholder="Tournament Round ID"
+                        onChange={(e) => {
+                            setTournamentRoundId(Number(e.target.value));
+                        }}
+                    />
                 </div>
                 <AddMatchButton
                     onClick={(e: any) => {
+                        e.preventDefault();
                         let homeScore =
                             homeForwardsScore +
                             (homeDefendersScore ? homeDefendersScore : 0);
@@ -184,13 +195,13 @@ export default function AddMatchForm() {
                         if (homeScore >= 8 || awayScore >= 8) {
                             if (Math.abs(homeScore - awayScore) < 2) {
                                 alert(
-                                    'Winning team must win by at least 2 goals. Invalid game.'
+                                    "Winning team must win by at least 2 goals. Invalid game."
                                 );
                                 return;
                             }
                         } else {
                             alert(
-                                'Winning score must be equal to or greater than 8. Invalid game.'
+                                "Winning score must be equal to or greater than 8. Invalid game."
                             );
                             return;
                         }
@@ -212,7 +223,9 @@ export default function AddMatchForm() {
                                 homeScore > awayScore ? Team.HOME : Team.AWAY,
                             tournament_id: tournamentId,
                             tournament_round_id: tournamentRoundId,
-                        } as MatchData);
+                        } as MatchData).then(() => {
+                            router.push("/match");
+                        });
                     }}
                 />
             </form>

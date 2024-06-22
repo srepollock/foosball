@@ -3,16 +3,16 @@ import {
     DefaultTeamStats,
     TeamData,
     TeamStats,
-} from '@/models/TeamsData';
-import { GenerateTeamName } from '@/utils/Helpers';
-import { createClient } from '@/utils/supabase/client';
+} from "@/models/TeamsData";
+import { GenerateTeamName } from "@/utils/Helpers";
+import { createClient } from "@/utils/supabase/client";
 
 export async function GetAllTeams() {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('teams')
-        .select('*')
-        .order('created_at', { ascending: false });
+        .from("teams")
+        .select("*")
+        .order("created_at", { ascending: false });
     if (error) {
         console.error(error);
         return [];
@@ -25,11 +25,11 @@ export async function CreateTeam(
     defenseId: string,
     teamName?: string
 ) {
-    if (!teamName || teamName === '') {
+    if (!teamName || teamName === "") {
         teamName = GenerateTeamName();
     }
     const supabase = createClient();
-    const { error } = await supabase.from('teams').insert({
+    const { error } = await supabase.from("teams").insert({
         forward_id: forwardId,
         defense_id: defenseId,
         team_name: teamName,
@@ -42,9 +42,9 @@ export async function CreateTeam(
 export async function GetTeam(id: string): Promise<TeamData> {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('teams')
-        .select('*')
-        .eq('id', id)
+        .from("teams")
+        .select("*")
+        .eq("id", id)
         .single();
     if (error) {
         console.error(error);
@@ -56,9 +56,10 @@ export async function GetTeam(id: string): Promise<TeamData> {
 export async function GetTeamByPlayers(forward_id: string, defense_id: string) {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('teams')
-        .select('*')
-        .or(`forward_id.eq.${forward_id}, defense_id.eq.${defense_id}`)
+        .from("teams")
+        .select("*")
+        .eq("forward_id", forward_id)
+        .eq("defense_id", defense_id)
         .single();
     if (error) {
         console.error(error);
@@ -70,8 +71,8 @@ export async function GetTeamByPlayers(forward_id: string, defense_id: string) {
 export async function GetTeamStats(id: string): Promise<TeamStats> {
     const supabase = createClient();
     const { data, error } = await supabase
-        .from('matches')
-        .select('*')
+        .from("matches")
+        .select("*")
         .or(`home_team_id.eq.${id}, away_team_id.eq.${id}`);
     if (error) {
         console.error(error);

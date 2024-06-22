@@ -69,7 +69,8 @@ export async function calculateTotalMatches(userId?: string) {
 export async function handleAddMatch(e: any, matchData: MatchData) {
     const supabase = createClient();
     if (matchData.tournament_id) {
-        handleAddTournamentMatch(e, matchData);
+        await handleAddTournamentMatch(e, matchData);
+        return;
     }
     if (
         matchData.home_forward &&
@@ -144,12 +145,12 @@ export async function handleAddMatch(e: any, matchData: MatchData) {
 export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
     const supabase = createClient();
     if (
-        matchData.home_forward &&
-        matchData.home_defense &&
-        matchData.away_forward &&
-        matchData.away_defense &&
-        matchData.tournament_id &&
-        matchData.tournament_round_id
+        matchData.home_forward != undefined &&
+        matchData.home_defense != undefined &&
+        matchData.away_forward != undefined &&
+        matchData.away_defense != undefined &&
+        matchData.tournament_id != undefined &&
+        matchData.tournament_round_id != undefined
     ) {
         let home_team = await GetTeamByPlayers(
             matchData.home_forward,
@@ -159,39 +160,47 @@ export async function handleAddTournamentMatch(e: any, matchData: MatchData) {
             matchData.away_forward,
             matchData.away_defense
         );
-        const { data, error } = await supabase.from("matches").insert([
-            {
-                created_at: matchData.created_at,
-                played_at: matchData.played_at,
-                home_forward: matchData.home_forward,
-                home_forward_goals: matchData.home_forward_goals ?? 0,
-                away_forward: matchData.away_forward,
-                away_forward_goals: matchData.away_forward_goals ?? 0,
-                home_defense: matchData.home_defense,
-                home_defense_goals: matchData.home_defense_goals ?? 0,
-                away_defense: matchData.away_defense,
-                away_defense_goals: matchData.away_defense_goals ?? 0,
-                score_home: matchData.score_home,
-                score_away: matchData.score_away,
-                winner: matchData.winner,
-                home_team_id: home_team.id ?? null,
-                away_team_id: away_team.id ?? null,
-                tournament_id: matchData.tournament_id,
-            },
-        ]);
-        // TODO: this navigates away from the page and does not execute if the insert is successful
-        UpdateTournamentGame(
-            matchData!.tournament_id,
-            matchData.id!,
-            matchData.tournament_round_id
-        );
-
+        const { data, error } = await supabase
+            .from("matches")
+            .insert([
+                {
+                    created_at: matchData.created_at,
+                    played_at: matchData.played_at,
+                    home_forward: matchData.home_forward,
+                    home_forward_goals: matchData.home_forward_goals ?? 0,
+                    away_forward: matchData.away_forward,
+                    away_forward_goals: matchData.away_forward_goals ?? 0,
+                    home_defense: matchData.home_defense,
+                    home_defense_goals: matchData.home_defense_goals ?? 0,
+                    away_defense: matchData.away_defense,
+                    away_defense_goals: matchData.away_defense_goals ?? 0,
+                    score_home: matchData.score_home,
+                    score_away: matchData.score_away,
+                    winner: matchData.winner,
+                    home_team_id: home_team.id ?? null,
+                    away_team_id: away_team.id ?? null,
+                    tournament_id: matchData.tournament_id,
+                    tournament_round_id: matchData.tournament_round_id,
+                },
+            ])
+            .select("id");
         if (error) {
             console.error("Error adding match:", error.message);
+            return;
         } else {
             console.log("Match added successfully:", data);
             // Add any further logic here, such as resetting form fields
         }
+        // TODO: this navigates away from the page and does not execute if the insert is successful
+        UpdateTournamentGame(
+            matchData!.tournament_id,
+            data[0].id,
+            matchData.tournament_round_id,
+            {
+                home_team_id: home_team.id,
+                away_team_id: away_team.id,
+            }
+        );
     } else {
         console.error("Please fill in all fields");
     }

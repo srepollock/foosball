@@ -6,6 +6,7 @@ import { BracketData } from "@/models/BracketData";
 import { GetTeam } from "./TeamFunctions";
 import { GetUserIdFullNameData } from "./UserDataFunctions";
 import { fetchMatch } from "./MatchFunctions";
+import { TournamentBracketMatchupObject } from "@/models/TournamentBracket";
 
 export async function GetAllTournaments() {
     const supabase = createClient();
@@ -79,8 +80,8 @@ export async function UpdateTournamentBracket(
     const supabase = createClient();
     const { error } = await supabase
         .from("tournament")
-        .update({ bracket: bracket })
-        .eq("id", tournamentId);
+        .update({ bracket: `${bracket}` })
+        .eq("id", `${tournamentId}`);
     if (error) {
         console.error(error);
     }
@@ -89,7 +90,11 @@ export async function UpdateTournamentBracket(
 export async function UpdateTournamentGame(
     tournamentId: string,
     matchId: string,
-    gameNumber: number
+    roundId: number,
+    matchData: {
+        home_team_id: string;
+        away_team_id: string;
+    }
 ) {
     const supabase = createClient();
     const { data, error } = await supabase
@@ -101,9 +106,15 @@ export async function UpdateTournamentGame(
         console.error(error);
         return {};
     }
-    let bracketData = JSON.parse(data.bracket);
+    let bracketData: TournamentBracketMatchupObject[] = JSON.parse(
+        data.bracket
+    );
     for (let i = 0; i < bracketData.length; i++) {
-        if (bracketData[i].game_number == gameNumber) {
+        if (
+            bracketData[i].round == roundId &&
+            matchData.home_team_id == bracketData[i].home_team_id &&
+            matchData.away_team_id == bracketData[i].away_team_id
+        ) {
             bracketData[i].match_id = matchId;
         }
     }
